@@ -4,8 +4,7 @@ public class BattleInformation {
     private int vitality;
     private int dexterity;
     private int dodge;
-    private int minimumDamage;
-    private int maximumDamage;
+    private int strength;
     private int defense;
     private int speed;
 
@@ -21,20 +20,12 @@ public class BattleInformation {
         return dodge;
     }
 
-    public int getMinimumDamage() {
-        return minimumDamage;
+    public int getStrength() {
+        return strength;
     }
 
-    public void setMinimumDamage(int minimumDamage) {
-        this.minimumDamage = minimumDamage;
-    }
-
-    public int getMaximumDamage() {
-        return maximumDamage;
-    }
-
-    public void setMaximumDamage(int maximumDamage) {
-        this.maximumDamage = maximumDamage;
+    public void setStrength(int strength) {
+        this.strength = strength;
     }
 
     public void setDodge(int dodge) {

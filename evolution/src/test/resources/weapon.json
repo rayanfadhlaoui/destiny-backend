@@ -1,0 +1,15 @@
+[
+  {
+    "weaponType": "SWORD",
+    "name": "Iron sword",
+    "abilityWeight": {
+      "strength": "34",
+      "dexterity": "33",
+      "speed": "33"
+    },
+    "minimumDamage": "3",
+    "maximumDamage": "8",
+    "penetration": "5",
+    "blunt": "0"
+  }
+]

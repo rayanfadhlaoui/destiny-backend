@@ -1,50 +1,36 @@
 package ca.destiny.evolution.creation;
 
-import ca.destiny.evolution.enhancer.CharacteristicsEnhancer;
-import ca.destiny.evolution.enhancer.CharacteristicsEnhancerProvider;
+import ca.destiny.evolution.levelup.LevelUpExecutor;
 import ca.destiny.fighter.BattleFighterDto;
-import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.CharacteristicsDto;
+import ca.destiny.fighter.equipment.EquipmentDto;
+import ca.destiny.fighter.equipment.weapon.AbilityWeight;
+import ca.destiny.fighter.equipment.weapon.FistDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.other.RandomNumberGeneratorService;
 import ca.destiny.person.PersonDto;
-import ca.destiny.person.common.ClassEnum;
+import ca.destiny.fighter.ClassEnum;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class FighterFactory {
     private long lastId = 1L;
 
-    private final CharacteristicsEnhancerProvider characteristicsEnhancerProvider;
     private final RandomNumberGeneratorService randomNumberGeneratorService;
+    private final LevelUpExecutor levelUpExecutor;
 
-    public FighterFactory(CharacteristicsEnhancerProvider characteristicsEnhancerProvider,
-                          RandomNumberGeneratorService randomNumberGeneratorService) {
-        this.characteristicsEnhancerProvider = characteristicsEnhancerProvider;
+    public FighterFactory(RandomNumberGeneratorService randomNumberGeneratorService,
+                          LevelUpExecutor levelUpExecutor) {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
+        this.levelUpExecutor = levelUpExecutor;
     }
 
     public BattleFighterDto create(PersonDto personDto, Long userId) {
         BattleFighterDto battleFighter = createFighter(personDto, userId);
-        getEnhancers(personDto).forEach(en -> en.improve(battleFighter.getCharacteristics()));
-        battleFighter.setBattleInformation(getBattleInformation(battleFighter.getCharacteristics()));
+        levelUpExecutor.execute(battleFighter);
         return battleFighter;
     }
 
-    private BattleInformation getBattleInformation(CharacteristicsDto characteristics) {
-        BattleInformation battleInformation = new BattleInformation();
-        battleInformation.setVitality(characteristics.getVitality());
-        battleInformation.setDexterity(characteristics.getDexterity());
-        battleInformation.setDodge(characteristics.getDodge());
-        battleInformation.setDefense(characteristics.getDefense());
-        Integer strength = characteristics.getStrength();
-        battleInformation.setMinimumDamage(Math.max(1, strength / 2));
-        battleInformation.setMaximumDamage(strength);
-        return battleInformation;
-    }
 
     private BattleFighterDto createFighter(PersonDto person, Long userId) {
         BattleFighterDto fighterEntity = new BattleFighterDto();
@@ -53,24 +39,37 @@ public class FighterFactory {
         fighterEntity.setIdMainUser(userId);
         fighterEntity.setExperience(createExperience());
         fighterEntity.setPerson(person);
+        fighterEntity.setClassEnum(ClassEnum.NO_CLASS);
         fighterEntity.setCharacteristics(characteristics);
+        fighterEntity.setEquipmentDto(createEquipment());
         return fighterEntity;
+    }
+
+    private EquipmentDto createEquipment() {
+        EquipmentDto equipmentDto = new EquipmentDto();
+        FistDto rightWeapon = new FistDto();
+        rightWeapon.setName("Bare hand");
+        rightWeapon.setMinimumDamage(1);
+        rightWeapon.setMaximumDamage(6);
+        AbilityWeight abilityWeight = new AbilityWeight();
+        abilityWeight.setDexterity(34);
+        abilityWeight.setSpeed(33);
+        abilityWeight.setStrength(33);
+        rightWeapon.setAbilityWeight(abilityWeight);
+        rightWeapon.setBlunt(1);
+        rightWeapon.setPenetration(0);
+        equipmentDto.setRightWeapon(rightWeapon);
+        return equipmentDto;
     }
 
     private ExperienceDto createExperience() {
         var experienceDto = new ExperienceDto();
         experienceDto.setCurrentExperience(0);
         experienceDto.setWorth(10);
-        experienceDto.setNextLevel(randomNumberGeneratorService.getRandomNumberInts(10, 1000));
+        experienceDto.setNextLevel(randomNumberGeneratorService.getRandomNumberInts(10, 100));
         experienceDto.setCurrentExperience(0);
         return experienceDto;
     }
 
-    private List<CharacteristicsEnhancer> getEnhancers(PersonDto personDto) {
-        List<CharacteristicsEnhancer> enhancers = new ArrayList<>();
-        enhancers.add(characteristicsEnhancerProvider.getForClass(ClassEnum.NO_CLASS));
-        enhancers.add(characteristicsEnhancerProvider.getForRace(personDto.getRace()));
-        enhancers.add(characteristicsEnhancerProvider.getForGender(personDto.getGender()));
-        return enhancers;
-    }
+
 }

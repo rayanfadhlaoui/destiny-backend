@@ -31,7 +31,7 @@ class SimulationBattleExecutorTest {
         BattleFighterDto battleFighterDto = createFighterDto(1);
         DuelSingleCellBattleDto battle = createBattle(battleFighterDto);
         given(randomNumberGeneratorService.getRandomNumberInts(0, 100)).willReturn(100);
-        BattleDto actual = simulationBattleExecutor.execute(battle);
+        BattleDto actual = simulationBattleExecutor.customExecute(battle);
 
         Summary summary = actual.getSummary();
         assertThat(summary.isOver()).isTrue();
@@ -59,8 +59,7 @@ class SimulationBattleExecutorTest {
         BattleInformation battleInformation = new BattleInformation();
         battleInformation.setDexterity(200);
         battleInformation.setDodge(1);
-        battleInformation.setMinimumDamage(100);
-        battleInformation.setMaximumDamage(100);
+        battleInformation.setStrength(100);
         battleInformation.setVitality(1);
         battleInformation.setDefense(1);
         return battleInformation;

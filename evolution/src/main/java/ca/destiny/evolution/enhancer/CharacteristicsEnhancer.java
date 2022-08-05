@@ -1,8 +1,10 @@
 package ca.destiny.evolution.enhancer;
 
 import ca.destiny.fighter.CharacteristicsDto;
+import ca.destiny.other.RandomNumberGeneratorService;
 
 public abstract class CharacteristicsEnhancer {
+    private final RandomNumberGeneratorService randomNumberGeneratorService;
     protected Integer strength = 0;
     protected Integer speed = 0;
     protected Integer dexterity = 0;
@@ -12,15 +14,19 @@ public abstract class CharacteristicsEnhancer {
     protected Integer dodge = 0;
     protected Integer stamina = 0;
 
+    protected CharacteristicsEnhancer(RandomNumberGeneratorService randomNumberGeneratorService) {
+        this.randomNumberGeneratorService = randomNumberGeneratorService;
+    }
+
     public void improve(CharacteristicsDto characteristics) {
-        int courage = characteristics.getCourage() + this.courage;
-        int strength = characteristics.getStrength() + this.strength;
-        int speed = characteristics.getSpeed() + this.speed;
-        int dexterity = characteristics.getDexterity() + this.dexterity;
-        int defense = characteristics.getDefense() + this.defense;
-        int vitality = characteristics.getVitality() + this.vitality;
-        int dodge = characteristics.getDodge() + this.dodge;
-        int stamina = characteristics.getStamina() + this.stamina;
+        int courage = improve(characteristics.getCourage(), this.courage);
+        int strength = improve(characteristics.getStrength(), this.strength);
+        int speed = improve(characteristics.getSpeed(), this.speed);
+        int dexterity = improve(characteristics.getDexterity(), this.dexterity);
+        int defense = improve(characteristics.getDefense(), this.defense);
+        int vitality = improve(characteristics.getVitality(), this.vitality);
+        int dodge = improve(characteristics.getDodge(), this.dodge);
+        int stamina = improve(characteristics.getStamina(), this.stamina);
 
         characteristics.setCourage(courage);
         characteristics.setStrength(strength);
@@ -30,5 +36,9 @@ public abstract class CharacteristicsEnhancer {
         characteristics.setVitality(vitality);
         characteristics.setDodge(dodge);
         characteristics.setStamina(stamina);
+    }
+
+    private int improve(Integer current, Integer improvement) {
+        return current + randomNumberGeneratorService.getRandomNumberInts(0, improvement);
     }
 }

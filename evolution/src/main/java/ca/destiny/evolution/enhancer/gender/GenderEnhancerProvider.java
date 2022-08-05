@@ -1,17 +1,24 @@
 package ca.destiny.evolution.enhancer.gender;
 
 import ca.destiny.evolution.enhancer.CharacteristicsEnhancer;
+import ca.destiny.other.RandomNumberGeneratorService;
 import ca.destiny.person.common.GenderEnum;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GenderEnhancerProvider {
+    private final RandomNumberGeneratorService randomNumberGeneratorService;
+
+    public GenderEnhancerProvider(RandomNumberGeneratorService randomNumberGeneratorService) {
+        this.randomNumberGeneratorService = randomNumberGeneratorService;
+    }
+
     public CharacteristicsEnhancer get(GenderEnum genderEnum) {
         switch (genderEnum) {
             case MALE:
-                return new GenderEnhancer(3,0);
+                return new GenderEnhancer(3, 1, randomNumberGeneratorService);
             case FEMALE:
-                return new GenderEnhancer(0,3);
+                return new GenderEnhancer(1, 3, randomNumberGeneratorService);
             default:
                 throw new IllegalArgumentException("No enhancer for genderEnum :" + genderEnum);
         }

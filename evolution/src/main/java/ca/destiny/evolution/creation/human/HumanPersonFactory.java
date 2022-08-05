@@ -25,9 +25,14 @@ public class HumanPersonFactory {
 
     public PersonDto create(Long gameId) {
         PersonDto personDto = new HumanPersonDto();
-        String firstName = humanNameProvider.getMaleFirstName();
         String lastName = humanNameProvider.getLastName();
         GenderEnum gender = getGender();
+        String firstName;
+        if (gender == GenderEnum.MALE) {
+            firstName = humanNameProvider.getMaleFirstName();
+        } else {
+            firstName = humanNameProvider.getFemaleFirstName();
+        }
         personDto.setAge(12);
         personDto.setFirstName(firstName);
         personDto.setLastName(lastName);

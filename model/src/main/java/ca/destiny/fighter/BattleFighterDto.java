@@ -1,5 +1,6 @@
 package ca.destiny.fighter;
 
+import ca.destiny.fighter.equipment.EquipmentDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.person.PersonDto;
 
@@ -9,7 +10,9 @@ public class BattleFighterDto {
     private PersonDto person;
     private CharacteristicsDto characteristics;
     private BattleInformation battleInformation;
+    private EquipmentDto equipmentDto;
     private ExperienceDto experience;
+    private ClassEnum classEnum;
 
     public BattleFighterDto() {
     }
@@ -60,5 +63,21 @@ public class BattleFighterDto {
 
     public void setExperience(ExperienceDto experience) {
         this.experience = experience;
+    }
+
+    public ClassEnum getClassEnum() {
+        return classEnum;
+    }
+
+    public void setClassEnum(ClassEnum classEnum) {
+        this.classEnum = classEnum;
+    }
+
+    public EquipmentDto getEquipmentDto() {
+        return equipmentDto;
+    }
+
+    public void setEquipmentDto(EquipmentDto equipmentDto) {
+        this.equipmentDto = equipmentDto;
     }
 }

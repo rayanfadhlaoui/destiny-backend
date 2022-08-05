@@ -6,16 +6,17 @@ import ca.destiny.other.RandomNumberGeneratorService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TurnBasedBattleExecutor implements BattleExecutor {
+public class TurnBasedBattleExecutor extends BattleExecutor {
 
     private final RandomNumberGeneratorService randomNumberGeneratorService;
 
     public TurnBasedBattleExecutor(RandomNumberGeneratorService randomNumberGeneratorService) {
+        super(null);
         this.randomNumberGeneratorService = randomNumberGeneratorService;
     }
 
     @Override
-    public BattleDto execute(BattleDto battleDto) {
+    public BattleDto customExecute(BattleDto battleDto) {
 //        FighterDto activeFighter = battleDto.getActiveFighter();
 //        FighterDto inactiveFighter = battleDto.getInactiveFighter();
         return battleDto;

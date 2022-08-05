@@ -29,6 +29,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>ca.destiny.evolution</groupId>
+            <artifactId>evolution</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>ca.destiny.common-services</groupId>
             <artifactId>common-services</artifactId>
             <version>${project.version}</version>

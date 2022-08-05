@@ -3,14 +3,14 @@ package ca.destiny.fighter;
 
 public class CharacteristicsDto {
     private long id;
-    private int strength;
-    private int speed;
-    private int dexterity;
-    private int defense;
-    private int vitality;
-    private int courage;
-    private int dodge;
-    private int stamina;
+    private int strength = 1;
+    private int speed = 1;
+    private int dexterity = 1;
+    private int defense = 1;
+    private int vitality = 1;
+    private int courage = 1;
+    private int dodge = 1;
+    private int stamina = 1;
 
     public long getId() {
         return id;

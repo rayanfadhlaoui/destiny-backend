@@ -5,20 +5,23 @@ import ca.destiny.battle.action.Action;
 import ca.destiny.battle.model.BattleDto;
 import ca.destiny.battle.visitor.BattleVisitor;
 import ca.destiny.battle.visitor.action.ActionBattleVisitor;
+import ca.destiny.evolution.levelup.ExperienceService;
 import ca.destiny.other.RandomNumberGeneratorService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SimulationBattleExecutor implements BattleExecutor {
+public class SimulationBattleExecutor extends BattleExecutor {
 
     private final RandomNumberGeneratorService randomNumberGeneratorService;
 
-    public SimulationBattleExecutor(RandomNumberGeneratorService randomNumberGeneratorService) {
+    public SimulationBattleExecutor(ExperienceService experienceService,
+                                    RandomNumberGeneratorService randomNumberGeneratorService) {
+        super(experienceService);
         this.randomNumberGeneratorService = randomNumberGeneratorService;
     }
 
     @Override
-    public BattleDto execute(BattleDto battleDto) {
+    protected BattleDto customExecute(BattleDto battleDto) {
         boolean isOver = false;
         while (!isOver) {
             executeAction(battleDto);

@@ -3,7 +3,7 @@ package ca.destiny.evolution.enhancer;
 import ca.destiny.evolution.enhancer.classEnhancer.ClassEnhancerProvider;
 import ca.destiny.evolution.enhancer.gender.GenderEnhancerProvider;
 import ca.destiny.evolution.enhancer.race.RaceEnhancerProvider;
-import ca.destiny.person.common.ClassEnum;
+import ca.destiny.fighter.ClassEnum;
 import ca.destiny.person.common.GenderEnum;
 import ca.destiny.person.common.RaceEnum;
 import org.springframework.stereotype.Component;
