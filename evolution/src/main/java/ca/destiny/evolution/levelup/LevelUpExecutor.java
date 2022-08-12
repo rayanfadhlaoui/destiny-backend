@@ -29,10 +29,10 @@ public class LevelUpExecutor {
         battleInformation.setVitality(characteristics.getVitality());
         battleInformation.setDexterity(characteristics.getDexterity());
         battleInformation.setDodge(characteristics.getDodge());
-        battleInformation.setSpeed(characteristics.getDodge());
+        battleInformation.setResistance(characteristics.getResistance());
+        battleInformation.setSpeed(characteristics.getSpeed());
         battleInformation.setDefense(characteristics.getDefense());
-        Integer strength = characteristics.getStrength();
-        battleInformation.setStrength(strength);
+        battleInformation.setStrength(characteristics.getStrength());
         return battleInformation;
     }
 

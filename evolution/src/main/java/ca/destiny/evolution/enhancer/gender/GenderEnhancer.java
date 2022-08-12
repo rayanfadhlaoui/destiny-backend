@@ -9,7 +9,9 @@ public class GenderEnhancer extends CharacteristicsEnhancer {
         super(randomNumberGeneratorService);
         this.strength = first;
         this.vitality = first;
+        this.resistance = first;
         this.dexterity = second;
         this.dodge = second;
+        this.speed = second;
     }
 }

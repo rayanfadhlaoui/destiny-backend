@@ -23,6 +23,7 @@
         <module>battle</module>
         <module>application</module>
         <module>destinyTest</module>
+        <module>injury</module>
     </modules>
 
     <dependencyManagement>

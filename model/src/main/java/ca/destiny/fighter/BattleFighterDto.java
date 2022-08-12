@@ -1,8 +1,11 @@
 package ca.destiny.fighter;
 
+import ca.destiny.fighter.bodypart.BodyPartDto;
 import ca.destiny.fighter.equipment.EquipmentDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.person.PersonDto;
+
+import java.util.List;
 
 public class BattleFighterDto {
     private long id;
@@ -11,11 +14,9 @@ public class BattleFighterDto {
     private CharacteristicsDto characteristics;
     private BattleInformation battleInformation;
     private EquipmentDto equipmentDto;
+    private List<BodyPartDto> availableBodyParts;
     private ExperienceDto experience;
     private ClassEnum classEnum;
-
-    public BattleFighterDto() {
-    }
 
     public long getId() {
         return id;
@@ -79,5 +80,13 @@ public class BattleFighterDto {
 
     public void setEquipmentDto(EquipmentDto equipmentDto) {
         this.equipmentDto = equipmentDto;
+    }
+
+    public List<BodyPartDto> getAvailableBodyParts() {
+        return availableBodyParts;
+    }
+
+    public void setAvailableBodyParts(List<BodyPartDto> availableBodyParts) {
+        this.availableBodyParts = availableBodyParts;
     }
 }

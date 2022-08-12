@@ -13,6 +13,7 @@ public class DefaultEnhancer extends CharacteristicsEnhancer {
         this.vitality = 5;
         this.courage = 1;
         this.dodge = 1;
+        this.resistance = 1;
         this.stamina = 1;
     }
 }

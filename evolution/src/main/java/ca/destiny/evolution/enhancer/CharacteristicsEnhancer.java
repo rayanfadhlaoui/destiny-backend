@@ -12,6 +12,7 @@ public abstract class CharacteristicsEnhancer {
     protected Integer vitality = 0;
     protected Integer courage = 0;
     protected Integer dodge = 0;
+    protected Integer resistance = 0;
     protected Integer stamina = 0;
 
     protected CharacteristicsEnhancer(RandomNumberGeneratorService randomNumberGeneratorService) {
@@ -23,6 +24,7 @@ public abstract class CharacteristicsEnhancer {
         int strength = improve(characteristics.getStrength(), this.strength);
         int speed = improve(characteristics.getSpeed(), this.speed);
         int dexterity = improve(characteristics.getDexterity(), this.dexterity);
+        int resistance = improve(characteristics.getResistance(), this.resistance);
         int defense = improve(characteristics.getDefense(), this.defense);
         int vitality = improve(characteristics.getVitality(), this.vitality);
         int dodge = improve(characteristics.getDodge(), this.dodge);
@@ -31,6 +33,7 @@ public abstract class CharacteristicsEnhancer {
         characteristics.setCourage(courage);
         characteristics.setStrength(strength);
         characteristics.setSpeed(speed);
+        characteristics.setResistance(resistance);
         characteristics.setDexterity(dexterity);
         characteristics.setDefense(defense);
         characteristics.setVitality(vitality);

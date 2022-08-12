@@ -5,6 +5,7 @@ public class BattleInformation {
     private int dexterity;
     private int dodge;
     private int strength;
+    private int resistance;
     private int defense;
     private int speed;
 
@@ -54,5 +55,13 @@ public class BattleInformation {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public int getResistance() {
+        return resistance;
+    }
+
+    public void setResistance(int resistance) {
+        this.resistance = resistance;
     }
 }

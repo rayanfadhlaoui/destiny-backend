@@ -8,6 +8,7 @@ public class CharacteristicsDto {
     private int dexterity = 1;
     private int defense = 1;
     private int vitality = 1;
+    private int resistance = 1;
     private int courage = 1;
     private int dodge = 1;
     private int stamina = 1;
@@ -20,68 +21,75 @@ public class CharacteristicsDto {
         this.id = id;
     }
 
-    public Integer getStrength() {
+    public int getStrength() {
         return strength;
     }
 
-    public void setStrength(Integer strength) {
+    public void setStrength(int strength) {
         this.strength = strength;
     }
 
-    public Integer getSpeed() {
+    public int getSpeed() {
         return speed;
     }
 
-    public void setSpeed(Integer speed) {
+    public void setSpeed(int speed) {
         this.speed = speed;
     }
 
-    public Integer getDexterity() {
+    public int getDexterity() {
         return dexterity;
     }
 
-    public void setDexterity(Integer dexterity) {
+    public void setDexterity(int dexterity) {
         this.dexterity = dexterity;
     }
 
-    public Integer getDefense() {
+    public int getDefense() {
         return defense;
     }
 
-    public void setDefense(Integer defense) {
+    public void setDefense(int defense) {
         this.defense = defense;
     }
 
-    public Integer getVitality() {
+    public int getVitality() {
         return vitality;
     }
 
-    public void setVitality(Integer vitality) {
+    public void setVitality(int vitality) {
         this.vitality = vitality;
     }
 
-    public Integer getCourage() {
+    public int getCourage() {
         return courage;
     }
 
-    public void setCourage(Integer courage) {
+    public void setCourage(int courage) {
         this.courage = courage;
     }
 
-    public Integer getDodge() {
+    public int getDodge() {
         return dodge;
     }
 
-    public void setDodge(Integer dodge) {
+    public void setDodge(int dodge) {
         this.dodge = dodge;
     }
 
-    public Integer getStamina() {
+    public int getStamina() {
         return stamina;
     }
 
-    public void setStamina(Integer stamina) {
+    public void setStamina(int stamina) {
         this.stamina = stamina;
     }
 
+    public int getResistance() {
+        return resistance;
+    }
+
+    public void setResistance(int resistance) {
+        this.resistance = resistance;
+    }
 }
