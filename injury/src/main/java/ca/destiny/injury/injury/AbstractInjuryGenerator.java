@@ -20,7 +20,11 @@ public abstract class AbstractInjuryGenerator implements InjuryGenerator {
     public void inflict(boolean knockout) {
         int penalty = knockout ? getPenalty() : 0;
         Optional<Injury> optionalInjury = getOptionalInjury(penalty);
-        optionalInjury.ifPresent(bodyPart::addInjury);
+        optionalInjury.ifPresent(injury -> {
+            if (bodyPart != null) {
+                bodyPart.addInjury(injury);
+            }
+        });
     }
 
     protected abstract int getPenalty();

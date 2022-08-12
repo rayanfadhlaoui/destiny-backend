@@ -71,5 +71,4 @@ public class FighterFactory {
         return experienceDto;
     }
 
-
 }

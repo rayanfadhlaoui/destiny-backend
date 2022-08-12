@@ -6,6 +6,7 @@ import ca.destiny.battle.model.BattleDto;
 import ca.destiny.battle.visitor.BattleVisitor;
 import ca.destiny.battle.visitor.action.ActionBattleVisitor;
 import ca.destiny.evolution.levelup.ExperienceService;
+import ca.destiny.injury.InjuryService;
 import ca.destiny.other.RandomNumberGeneratorService;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Component;
 public class SimulationBattleExecutor extends BattleExecutor {
 
     private final RandomNumberGeneratorService randomNumberGeneratorService;
+    private final InjuryService injuryService;
 
     public SimulationBattleExecutor(ExperienceService experienceService,
-                                    RandomNumberGeneratorService randomNumberGeneratorService) {
+                                    RandomNumberGeneratorService randomNumberGeneratorService,
+                                    InjuryService injuryService) {
         super(experienceService);
         this.randomNumberGeneratorService = randomNumberGeneratorService;
+        this.injuryService = injuryService;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class SimulationBattleExecutor extends BattleExecutor {
     }
 
     private Action getAction(BattleDto battleDto) {
-        ActionBattleVisitor actionBattleVisitor = new ActionBattleVisitor(randomNumberGeneratorService);
+        ActionBattleVisitor actionBattleVisitor = new ActionBattleVisitor(randomNumberGeneratorService, injuryService);
         battleDto.visit(actionBattleVisitor);
         return actionBattleVisitor.getAction();
     }

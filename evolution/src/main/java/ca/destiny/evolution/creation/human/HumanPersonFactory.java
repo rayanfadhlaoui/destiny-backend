@@ -1,5 +1,6 @@
 package ca.destiny.evolution.creation.human;
 
+import ca.destiny.evolution.creation.bodypart.BodyPartFactory;
 import ca.destiny.game.GameInformationService;
 import ca.destiny.other.RandomNumberGeneratorService;
 import ca.destiny.person.PersonDto;
@@ -13,13 +14,15 @@ public class HumanPersonFactory {
 
     private final HumanNameProvider humanNameProvider;
     private final GameInformationService gameInformationService;
+    private final BodyPartFactory bodyPartFactory;
     private final RandomNumberGeneratorService randomNumberGeneratorService;
 
     public HumanPersonFactory(HumanNameProvider humanNameProvider,
                               GameInformationService gameInformationService,
-                              RandomNumberGeneratorService randomNumberGeneratorService) {
+                              BodyPartFactory bodyPartFactory, RandomNumberGeneratorService randomNumberGeneratorService) {
         this.humanNameProvider = humanNameProvider;
         this.gameInformationService = gameInformationService;
+        this.bodyPartFactory = bodyPartFactory;
         this.randomNumberGeneratorService = randomNumberGeneratorService;
     }
 
@@ -40,6 +43,7 @@ public class HumanPersonFactory {
         OriginTown originTown = new OriginTown();
         originTown.setName("Root Strain");
         personDto.setOriginTown(originTown);
+        personDto.setAvailableBodyParts(bodyPartFactory.create());
         personDto.setDestinyDate(gameInformationService.getCurrentDate(gameId));
         return personDto;
     }

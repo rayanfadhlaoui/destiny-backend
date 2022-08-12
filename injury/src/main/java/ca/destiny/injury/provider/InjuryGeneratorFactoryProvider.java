@@ -18,20 +18,16 @@ public class InjuryGeneratorFactoryProvider {
 
     public InjuryGeneratorFactory get(int damagePercentage, FighterInjuryInformation fighterInjuryInformation, WeaponDto weaponDto) {
         int[] probabilityAndSeverity = computeInjuryProbabilityAndSeverity(damagePercentage);
-        int probability = probabilityAndSeverity[0]; // 1
-        int randomNumber = randomNumberGeneratorService.getRandomNumberInts(0, 100);// 0 +1
-        int resistance = fighterInjuryInformation.getResistance();
-        int delta = probability - randomNumber;
-        if (delta >= 0) {
-            return InjuryGeneratorFactory.EMPTY;
-        } else if (resistance >= delta) {
-            fighterInjuryInformation.setResistance(resistance - delta);
+        int probability = probabilityAndSeverity[0];
+        int randomNumber = randomNumberGeneratorService.getRandomNumberInts(0, 100);
+        int resistance = randomNumberGeneratorService.getRandomNumberInts(0, fighterInjuryInformation.getResistance());
+        int delta = randomNumber - probability;
+        if (resistance + delta >= 0) {
             return InjuryGeneratorFactory.EMPTY;
         }
-        if(weaponDto.getBlunt() > 0) {
+        if (weaponDto.getBlunt() > 0) {
             return getBluntInjuryGeneratorFactory(probabilityAndSeverity[1]);
-        }
-        else {
+        } else {
             return getSharpeInjuryGeneratorFactory(probabilityAndSeverity[1]);
         }
     }
@@ -89,6 +85,6 @@ public class InjuryGeneratorFactoryProvider {
             percentage = 15;
             severity = 5;
         }
-        return new int[]{percentage, severity};
+        return new int[]{percentage, randomNumberGeneratorService.getRandomNumberInts(1, severity)};
     }
 }

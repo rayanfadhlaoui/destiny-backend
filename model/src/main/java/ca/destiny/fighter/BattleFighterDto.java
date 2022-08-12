@@ -14,7 +14,6 @@ public class BattleFighterDto {
     private CharacteristicsDto characteristics;
     private BattleInformation battleInformation;
     private EquipmentDto equipmentDto;
-    private List<BodyPartDto> availableBodyParts;
     private ExperienceDto experience;
     private ClassEnum classEnum;
 
@@ -80,13 +79,5 @@ public class BattleFighterDto {
 
     public void setEquipmentDto(EquipmentDto equipmentDto) {
         this.equipmentDto = equipmentDto;
-    }
-
-    public List<BodyPartDto> getAvailableBodyParts() {
-        return availableBodyParts;
-    }
-
-    public void setAvailableBodyParts(List<BodyPartDto> availableBodyParts) {
-        this.availableBodyParts = availableBodyParts;
     }
 }

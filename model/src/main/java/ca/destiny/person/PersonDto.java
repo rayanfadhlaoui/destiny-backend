@@ -1,5 +1,6 @@
 package ca.destiny.person;
 
+import ca.destiny.fighter.bodypart.BodyPartDto;
 import ca.destiny.person.common.DestinyDate;
 import ca.destiny.person.common.GenderEnum;
 import ca.destiny.person.common.OriginTown;
@@ -8,6 +9,8 @@ import ca.destiny.person.human.HumanPersonDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
@@ -22,6 +25,7 @@ public abstract class PersonDto {
     private OriginTown originTown;
     private int age;
     private GenderEnum gender;
+    private List<BodyPartDto> availableBodyParts;
 
     public abstract RaceEnum getRace();
 
@@ -79,5 +83,13 @@ public abstract class PersonDto {
 
     public void setOriginTown(OriginTown originTown) {
         this.originTown = originTown;
+    }
+
+    public List<BodyPartDto> getAvailableBodyParts() {
+        return availableBodyParts;
+    }
+
+    public void setAvailableBodyParts(List<BodyPartDto> availableBodyParts) {
+        this.availableBodyParts = availableBodyParts;
     }
 }

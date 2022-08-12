@@ -3,23 +3,28 @@ package ca.destiny.battle.action;
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.experience.ExperienceDto;
+import ca.destiny.injury.InjuryService;
+import ca.destiny.injury.model.FighterInjuryInformation;
 import ca.destiny.other.RandomNumberGeneratorService;
 
 public class AttackAction implements Action {
     private final HitService hitService;
     private final DamageService damageService;
     private final RandomNumberGeneratorService randomNumberGeneratorService;
+    private final InjuryService injuryService;
     private final BattleFighterDto defensiveBattleFighter;
     private final BattleFighterDto activeBattleFighter;
 
     public AttackAction(RandomNumberGeneratorService randomNumberGeneratorService,
+                        InjuryService injuryService,
                         BattleFighterDto activeFighter,
                         BattleFighterDto inactiveFighter) {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
+        this.injuryService = injuryService;
         this.hitService = new HitService();
         this.damageService = new DamageService();
-        defensiveBattleFighter = activeFighter;
-        activeBattleFighter = inactiveFighter;
+        defensiveBattleFighter = inactiveFighter;
+        activeBattleFighter = activeFighter;
     }
 
     @Override
@@ -32,11 +37,13 @@ public class AttackAction implements Action {
             int vitality = currentVitality - damage;
             defensiveBattleInformation.setVitality(vitality);
             ifWonAddExperience(vitality);
+            var fighterInjuryInformation = new FighterInjuryInformation(damage, defensiveBattleFighter);
+            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, activeBattleFighter.getEquipmentDto().getRightWeapon());
         }
         return false;
     }
 
-    private int getDamage( BattleInformation defensiveBattleInformation) {
+    private int getDamage(BattleInformation defensiveBattleInformation) {
         int defense = defensiveBattleInformation.getDefense();
         Range range = damageService.getDamage(activeBattleFighter, defense);
         return randomNumberGeneratorService.getRandomNumberInts(range.getLeft(), range.getRight());

@@ -2,6 +2,7 @@ package ca.destiny.fighter.experience;
 
 public class ExperienceDto {
 
+    private int level = 1;
     private int currentExperience;
     private int worth;
     private int nextLevel;
@@ -28,5 +29,13 @@ public class ExperienceDto {
 
     public void setNextLevel(int nextLevel) {
         this.nextLevel = nextLevel;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

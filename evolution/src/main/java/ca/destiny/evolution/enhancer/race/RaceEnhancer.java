@@ -15,7 +15,6 @@ public class RaceEnhancer extends CharacteristicsEnhancer {
         this.strength = strength;
         this.defense = defense;
         this.vitality = vitality;
-        this.resistance = defense;
         this.dexterity = dexterity;
         this.dodge = dodge;
         this.courage = courage;

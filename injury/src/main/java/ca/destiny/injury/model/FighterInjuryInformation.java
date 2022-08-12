@@ -18,9 +18,9 @@ public class FighterInjuryInformation {
 
         int maxVitality = characteristics.getVitality();
 
-        availableBodyParts = battleFighterDto.getAvailableBodyParts();
+        availableBodyParts = battleFighterDto.getPerson().getAvailableBodyParts();
         isKnockout = battleInformation.getVitality() <= 0;
-        this.damagePercentage = (damage / maxVitality) * 100;
+        this.damagePercentage = ((damage * 100) / maxVitality);
     }
 
     public int getDamagePercentage() {

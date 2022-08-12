@@ -31,6 +31,8 @@ public class ExperienceService {
         }
 
         while (levelUp != 0) {
+            int level = experience.getLevel();
+            experience.setLevel(level + 1);
             levelUpExecutor.execute(battleFighterDto);
             levelUp--;
         }

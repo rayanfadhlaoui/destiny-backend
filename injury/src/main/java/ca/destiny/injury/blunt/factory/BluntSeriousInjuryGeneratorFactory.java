@@ -1,8 +1,8 @@
 package ca.destiny.injury.blunt.factory;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
-import ca.destiny.injury.blunt.generator.serious.BodySeriousBluntAbstractInjuryGenerator;
-import ca.destiny.injury.blunt.generator.serious.HeadSeriousBluntAbstractInjuryGenerator;
+import ca.destiny.injury.blunt.generator.body.BodySeriousBluntInjuryGenerator;
+import ca.destiny.injury.blunt.generator.head.HeadSeriousBluntInjuryGenerator;
 import ca.destiny.injury.blunt.generator.legorarm.LegOrArmSeriousBluntInjuryGenerator;
 import ca.destiny.injury.injury.InjuryGenerator;
 
@@ -15,11 +15,11 @@ public class BluntSeriousInjuryGeneratorFactory extends AbstractBluntInjuryGener
 
     @Override
     protected InjuryGenerator getHeadInjuryGenerator(BodyPartDto bodyPart) {
-        return new HeadSeriousBluntAbstractInjuryGenerator(bodyPart);
+        return new HeadSeriousBluntInjuryGenerator(bodyPart);
     }
 
     @Override
     protected InjuryGenerator getBodyInjuryGenerator(BodyPartDto bodyPart) {
-        return new BodySeriousBluntAbstractInjuryGenerator(bodyPart);
+        return new BodySeriousBluntInjuryGenerator(bodyPart);
     }
 }

@@ -4,6 +4,7 @@ import ca.destiny.battle.action.Action;
 import ca.destiny.battle.action.AttackAction;
 import ca.destiny.battle.model.DuelSingleCellBattleDto;
 import ca.destiny.fighter.BattleFighterDto;
+import ca.destiny.injury.InjuryService;
 import ca.destiny.other.RandomNumberGeneratorService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,18 +18,20 @@ class DuelSingleCellActionBattleVisitorTest {
 
     @Mock
     private RandomNumberGeneratorService randomNumberGeneratorService;
+    @Mock
+    private InjuryService injuryService;
 
     @Test
     void givenTwoFighterCac_ThenActionIsAttack() {
         BattleFighterDto activeFighter = createFighterDto(1);
         BattleFighterDto inactiveFighter = createFighterDto(2);
         DuelSingleCellBattleDto battleDto = createBattleDto(activeFighter, inactiveFighter);
-        ActionBattleVisitor actionBattleVisitor = new ActionBattleVisitor(randomNumberGeneratorService);
+        ActionBattleVisitor actionBattleVisitor = new ActionBattleVisitor(randomNumberGeneratorService, injuryService);
         battleDto.visit(actionBattleVisitor);
         Action action = actionBattleVisitor.getAction();
         assertThat(action).isInstanceOf(AttackAction.class);
         AttackAction attackAction = (AttackAction) action;
-        assertThat(attackAction).isEqualToComparingFieldByFieldRecursively(new AttackAction(randomNumberGeneratorService, activeFighter, inactiveFighter));
+        assertThat(attackAction).isEqualToComparingFieldByFieldRecursively(new AttackAction(randomNumberGeneratorService, injuryService, activeFighter, inactiveFighter));
     }
 
     private BattleFighterDto createFighterDto(int id) {

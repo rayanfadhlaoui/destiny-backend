@@ -76,12 +76,30 @@ public class Battle extends AbstractIntegrationTest {
 
     @Test
     void apprenticeExam() throws IOException, URISyntaxException {
-        List<BattleFighterDto> apprentices = new ArrayList<>();
-        for (int i = 0; i < 305; i++) {
-            List<BattleFighterDto> winners = battleFull();
-            apprentices.addAll(winners);
+        List<BattleFighterDto> apprentices = create(5000);
+
+        Map<Long, Integer> score = new HashMap<>();
+
+        for (int i = 0; i < 200; i++) {
+            Collections.shuffle(Arrays.asList(apprentices));
+            round(apprentices, score);
         }
-        writeData(apprentices, "winners.json");
+
+        List<BattleFighterDto> thirdClass = score.entrySet()
+                .stream()
+                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+                .limit(512)
+                .map(Map.Entry::getKey)
+                .map(id -> apprentices.stream().filter(a -> a.getId() == id).findFirst().orElseThrow(() -> new RuntimeException("")))
+                .collect(Collectors.toList());
+
+        thirdClass.forEach(w -> {
+            int currentExperience = w.getExperience().getCurrentExperience();
+            w.getExperience().setCurrentExperience(currentExperience + 200);
+            w.setClassEnum(ClassEnum.APPRENTICE);
+            experienceService.explore(w);
+        });
+        writeData(thirdClass, "apprentice.json");
     }
 
     @Test
@@ -112,7 +130,6 @@ public class Battle extends AbstractIntegrationTest {
         });
         writeData(thirdClass, "winners.json");
     }
-
 
     @Test
     void extreme() throws IOException, URISyntaxException {
@@ -173,7 +190,7 @@ public class Battle extends AbstractIntegrationTest {
     }
 
     private List<BattleFighterDto> battleFull() {
-        List<BattleFighterDto> list = create();
+        List<BattleFighterDto> list = create(4096);
         List<BattleFighterDto> winners = list;
 
         while (winners.size() != 2) {
@@ -208,11 +225,11 @@ public class Battle extends AbstractIntegrationTest {
         }
     }
 
-    List<BattleFighterDto> create() {
+    List<BattleFighterDto> create(int size) {
         var destinyDate = createDestinyDate();
         given(gameInformationServiceMock.getCurrentDate(GAME_ID)).willReturn(destinyDate);
         List<BattleFighterDto> fighters = new ArrayList<>();
-        for (int i = 0; i < 4096; i++) {
+        for (int i = 0; i < size; i++) {
             var personDto = personFactory.create(RaceEnum.HUMAN, 1L);
             var fighter = fighterFactory.create(personDto, 1L);
             fighters.add(fighter);
@@ -239,11 +256,13 @@ public class Battle extends AbstractIntegrationTest {
 
     private void refresh(BattleFighterDto battleFighterDto) {
         CharacteristicsDto characteristics = battleFighterDto.getCharacteristics();
-        Integer speed = characteristics.getSpeed();
-        Integer vitality = characteristics.getVitality();
+        int speed = characteristics.getSpeed();
+        int vitality = characteristics.getVitality();
+        int resistance = characteristics.getResistance();
         BattleInformation battleInformation = battleFighterDto.getBattleInformation();
         battleInformation.setSpeed(speed);
-        battleFighterDto.getBattleInformation().setVitality(vitality);
+        battleInformation.setResistance(resistance);
+        battleInformation.setVitality(vitality);
     }
 
     private BattleDto createBattleDto(BattleFighterDto battleFighterDto,

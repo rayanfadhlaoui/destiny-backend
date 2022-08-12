@@ -13,7 +13,7 @@ public class ThirdClassEnhancer extends CharacteristicsEnhancer {
         this.vitality = 15;
         this.courage = 3;
         this.dodge = 3;
-        this.resistance = 3;
+        this.resistance = 1;
         this.stamina = 3;
         this.speed = 2;
     }
