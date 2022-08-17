@@ -1,211 +1,189 @@
 package ca.destiny.battle.integration;
 
-import ca.destiny.ApplicationTest;
 import ca.destiny.battle.factory.BattleBuilder;
 import ca.destiny.battle.factory.BattleType;
 import ca.destiny.battle.model.BattleDto;
 import ca.destiny.battle.simulation.SimulationBattleExecutor;
-import ca.destiny.evolution.creation.FighterFactory;
-import ca.destiny.evolution.creation.PersonFactory;
-import ca.destiny.evolution.levelup.ExperienceService;
-import ca.destiny.fighter.BattleFighterDto;
-import ca.destiny.fighter.BattleInformation;
-import ca.destiny.fighter.CharacteristicsDto;
-import ca.destiny.game.GameInformationService;
-import ca.destiny.fighter.ClassEnum;
-import ca.destiny.person.common.DestinyDate;
-import ca.destiny.person.common.RaceEnum;
+import ca.destiny.destinytest.AbstractIntegration;
+import ca.destiny.fighter.*;
+import ca.destiny.fighter.equipment.weapon.*;
+import ca.destiny.other.RandomNumberGeneratorService;
+import ca.destiny.weapon.behavior.OptimalWeaponFinder;
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ca.destiny.destinytest.AbstractIntegrationTest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.NoSuchFileException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static org.mockito.BDDMockito.given;
+public abstract class Battle extends AbstractIntegration {
 
-@ExtendWith(SpringExtension.class)
-@Import(BattleConfiguration.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ApplicationTest.class)
-public class Battle extends AbstractIntegrationTest {
+    private final SimulationBattleExecutor simulationBattleExecutor;
 
-    public static final long GAME_ID = 1L;
-    @Autowired
-    private SimulationBattleExecutor simulationBattleExecutor;
+    private final RandomNumberGeneratorService randomNumberGeneratorService;
 
-    @Autowired
-    private ExperienceService experienceService;
+    private final OptimalWeaponFinder optimalWeaponFinder;
 
-    @Autowired
-    private PersonFactory personFactory;
-    @Autowired
-    private FighterFactory fighterFactory;
-
-    @Autowired
-    private GameInformationService gameInformationServiceMock;
-
-    void battle() throws IOException, URISyntaxException {
-        List<BattleFighterDto> list = loadListFromFile("fighter.json", new TypeReference<>() {
-        });
-        List<BattleFighterDto> winners = list;
-
-        while (winners.size() != 4) {
-            list = winners;
-            winners = new ArrayList<>();
-            executeBattles(list, winners);
-        }
-        System.out.println(winners.size());
-
-        winners.forEach(w -> {
-            int currentExperience = w.getExperience().getCurrentExperience();
-            w.getExperience().setCurrentExperience(currentExperience + 200);
-            w.setClassEnum(ClassEnum.APPRENTICE);
-            experienceService.explore(w);
-        });
-
-        writeData(winners, "winners.json");
+    public Battle(Class<?> aClass,
+                  OptimalWeaponFinder optimalWeaponFinder,
+                  RandomNumberGeneratorService randomNumberGeneratorService,
+                  SimulationBattleExecutor simulationBattleExecutor) {
+        super(aClass);
+        this.simulationBattleExecutor = simulationBattleExecutor;
+        this.randomNumberGeneratorService = randomNumberGeneratorService;
+        this.optimalWeaponFinder = optimalWeaponFinder;
     }
 
-    @Test
-    void apprenticeExam() throws IOException, URISyntaxException {
-        List<BattleFighterDto> apprentices = create(5000);
+    protected void exam(String inputFile, String outputFile, String loserFile, int nbRounds) throws IOException, URISyntaxException {
+        List<BattleFighterDto> participants = loadListFromFile(inputFile, new TypeReference<>() {
+        });
+        exam(participants, outputFile, loserFile, nbRounds);
+    }
 
+    protected void exam(List<BattleFighterDto> participants, String outputFile, String loserFile, int nbRounds) throws IOException, URISyntaxException {
+
+        if (participants.size() % 2 == 1) {
+            throw new IllegalArgumentException(participants.size() + " Not even");
+        }
+
+        List<WeaponDto> weapons = Arrays.asList(createDagger(), createSword(), createAxe(), createFist());
+        participants.forEach(w -> {
+            var all = new ArrayList<>(weapons);
+            WeaponDto rightWeapon = w.getEquipmentDto().getRightWeapon();
+            all.add(rightWeapon);
+            WeaponDto optimal = optimalWeaponFinder.findOptimal(all, w.getCharacteristics());
+            w.getEquipmentDto().setRightWeapon(optimal);
+        });
+
+        reassignIds(participants);
         Map<Long, Integer> score = new HashMap<>();
-
-        for (int i = 0; i < 200; i++) {
-            Collections.shuffle(Arrays.asList(apprentices));
-            round(apprentices, score);
-        }
-
-        List<BattleFighterDto> thirdClass = score.entrySet()
-                .stream()
-                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-                .limit(512)
-                .map(Map.Entry::getKey)
-                .map(id -> apprentices.stream().filter(a -> a.getId() == id).findFirst().orElseThrow(() -> new RuntimeException("")))
-                .collect(Collectors.toList());
-
-        thirdClass.forEach(w -> {
-            int currentExperience = w.getExperience().getCurrentExperience();
-            w.getExperience().setCurrentExperience(currentExperience + 200);
-            w.setClassEnum(ClassEnum.APPRENTICE);
-            experienceService.explore(w);
-        });
-        writeData(thirdClass, "apprentice.json");
-    }
-
-    @Test
-    void thirdClassExam() throws IOException, URISyntaxException {
-        List<BattleFighterDto> apprentices = loadListFromFile("fighters.json", new TypeReference<>() {
-        });
-
-        Map<Long, Integer> score = new HashMap<>();
-
-        for (int i = 0; i < 20; i++) {
-            Collections.shuffle(apprentices);
-            round(apprentices, score);
-        }
-
-        List<BattleFighterDto> thirdClass = score.entrySet()
-                .stream()
-                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-                .limit(512)
-                .map(Map.Entry::getKey)
-                .map(id -> apprentices.stream().filter(a -> a.getId() == id).findFirst().orElseThrow(() -> new RuntimeException("")))
-                .collect(Collectors.toList());
-
-        thirdClass.forEach(w -> {
-            int currentExperience = w.getExperience().getCurrentExperience();
-            w.getExperience().setCurrentExperience(currentExperience + 500);
-            w.setClassEnum(ClassEnum.THIRD_CLASS);
-            experienceService.explore(w);
-        });
-        writeData(thirdClass, "winners.json");
-    }
-
-    @Test
-    void extreme() throws IOException, URISyntaxException {
-        List<BattleFighterDto> list = loadListFromFile("thirdClass.json", new TypeReference<>() {
-        });
-        Map<Integer, Integer> vitalityMap = new HashMap<>();
-        Map<Integer, Integer> strengthMap = new HashMap<>();
-        Map<Integer, Integer> dodgeMap = new HashMap<>();
-        Map<Integer, Integer> dexterityMap = new HashMap<>();
-        Map<Integer, Integer> defenseMap = new HashMap<>();
-        Map<Integer, Integer> speedMap = new HashMap<>();
-        list.stream()
-                .map(BattleFighterDto::getCharacteristics)
-                .forEach(c -> {
-                    aggregate(vitalityMap, c.getVitality());
-                    aggregate(strengthMap, c.getStrength());
-                    aggregate(dodgeMap, c.getDodge());
-                    aggregate(dexterityMap, c.getDexterity());
-                    aggregate(defenseMap, c.getDefense());
-                    aggregate(speedMap, c.getSpeed());
+        participants.forEach(p -> score.put(p.getId(), 0));
+        for (int i = 0; i < nbRounds; i++) {
+            Collections.shuffle(participants);
+            round(participants, score);
+            if (i == nbRounds / 2) {
+                participants.forEach(w -> {
+                    var all = new ArrayList<>(weapons);
+                    all.add(w.getEquipmentDto().getRightWeapon());
+                    WeaponDto optimal = optimalWeaponFinder.findOptimal(all, w.getCharacteristics());
+                    w.getEquipmentDto().setRightWeapon(optimal);
                 });
+            }
+        }
 
-        print("vitalityMap", vitalityMap);
-        print("strengthMap", strengthMap);
-        print("dodgeMap", dodgeMap);
-        print("dexterityMap", dexterityMap);
-        print("defenseMap", defenseMap);
-        print("speedMap", speedMap);
-    }
+        List<BattleFighterDto> sorted = score.entrySet()
+                .stream()
+                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+                .map(Map.Entry::getKey)
+                .map(id -> participants.stream().filter(a -> a.getId() == id).findFirst().orElseThrow(() -> new RuntimeException(String.valueOf(id))))
+                .collect(Collectors.toList());
+        List<BattleFighterDto> promoted = new ArrayList<>();
+        List<BattleFighterDto> losers = new ArrayList<>();
+        int count = 0;
+        for (BattleFighterDto fighter : sorted) {
+            if (count < laureate()) {
+                promoted.add(fighter);
+            } else {
+                losers.add(fighter);
+            }
+            int age = fighter.getPerson().getAge();
+            fighter.getPerson().setAge(age + 1);
+            count++;
+        }
+        promoted.forEach(w -> {
+            while (randomNumberGeneratorService.getRandomNumberInts(0, specialisationDifficulty()) == 0) {
+                w.addSpecialisation(SpecialisationEnum.values()[randomNumberGeneratorService.getRandomNumberInts(0, 5)]);
+            }
 
-    @Test
-    void reassignIds() throws IOException, URISyntaxException {
-        List<BattleFighterDto> list = loadListFromFile("fighters.json", new TypeReference<>() {
+            w.setClassEnum(getPromotion());
+            var all = new ArrayList<>(weapons);
+            all.add(w.getEquipmentDto().getRightWeapon());
+            WeaponDto optimal = optimalWeaponFinder.findOptimal(all, w.getCharacteristics());
+            w.getEquipmentDto().setRightWeapon(optimal);
         });
 
+        writePromoted(outputFile, promoted);
+        writeData(losers, loserFile);
+    }
+
+    private void writePromoted(String outputFile, List<BattleFighterDto> promoted) throws URISyntaxException, IOException {
+        try {
+            List<BattleFighterDto> oldPromoted = loadListFromFile(outputFile, new TypeReference<>() {
+            });
+            promoted.addAll(oldPromoted);
+        } catch (NoSuchFileException e) {
+
+        }
+        writeData(promoted, outputFile);
+    }
+
+    protected abstract int laureate();
+
+    protected abstract ClassEnum getPromotion();
+
+    protected abstract int specialisationDifficulty();
+
+    protected abstract int getMinimumDamage();
+
+    protected abstract int getMaximumDamage();
+
+    protected abstract String getWeaponName();
+
+    private WeaponDto createAxe() {
+        WeaponDto weaponDto = new AxeDto();
+        weaponDto.setPenetration(1);
+        weaponDto.setName(getWeaponName() + " axe");
+        weaponDto.setMinimumDamage(getMinimumDamage());
+        weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
+        return weaponDto;
+    }
+
+    private WeaponDto createSword() {
+        WeaponDto weaponDto = new SwordDto();
+        weaponDto.setPenetration(1);
+        weaponDto.setName(getWeaponName() + " sword");
+        weaponDto.setMinimumDamage(getMinimumDamage());
+        weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
+        return weaponDto;
+    }
+
+    private WeaponDto createDagger() {
+        WeaponDto weaponDto = new DaggerDto();
+        weaponDto.setPenetration(1);
+        weaponDto.setName(getWeaponName() + " dagger");
+        weaponDto.setMinimumDamage(getMinimumDamage());
+        weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
+        return weaponDto;
+    }
+
+    private WeaponDto createFist() {
+        WeaponDto weaponDto = new FistDto();
+        weaponDto.setPenetration(10);
+        weaponDto.setName(getWeaponName() + " fist");
+        weaponDto.setMinimumDamage(getMinimumDamage());
+        weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
+        return weaponDto;
+    }
+
+    private AbilityBonus createAbilityBonus(int strength, int speed, int dexterity) {
+        AbilityBonus abilityBonus = new AbilityBonus();
+        abilityBonus.setDexterity(dexterity);
+        abilityBonus.setSpeed(speed);
+        abilityBonus.setStrength(strength);
+        return abilityBonus;
+    }
+
+    private void reassignIds(List<BattleFighterDto> list) {
         AtomicInteger atomicInteger = new AtomicInteger(1);
-
-        list.stream()
-                .forEach(c -> {
-                    c.setId(atomicInteger.getAndIncrement());
-                });
-        writeData(list, "apprentices.json");
-
-    }
-
-    private void print(String mapName, Map<Integer, Integer> map) {
-        System.out.println("");
-        System.out.println("");
-        System.out.println("-----------------------------------------------------");
-        System.out.println(mapName);
-        map.forEach((key, value) -> System.out.println(key + ": " + value));
-        System.out.println("-----------------------------------------------------");
-    }
-
-    private void aggregate(Map<Integer, Integer> vitalityMap, Integer value) {
-        vitalityMap.computeIfPresent(value, (k, v) -> v + 1);
-        vitalityMap.putIfAbsent(value, 1);
-    }
-
-    private List<BattleFighterDto> battleFull() {
-        List<BattleFighterDto> list = create(4096);
-        List<BattleFighterDto> winners = list;
-
-        while (winners.size() != 2) {
-            list = winners;
-            winners = new ArrayList<>();
-            executeBattles(list, winners);
-        }
-
-        winners.forEach(w -> {
-            int currentExperience = w.getExperience().getCurrentExperience();
-            w.getExperience().setCurrentExperience(currentExperience + 200);
-            w.setClassEnum(ClassEnum.APPRENTICE);
-            experienceService.explore(w);
+        list.forEach(c -> {
+            c.setId(atomicInteger.getAndIncrement());
         });
-        return winners;
     }
 
     private void round(List<BattleFighterDto> list, Map<Long, Integer> score) {
@@ -225,35 +203,6 @@ public class Battle extends AbstractIntegrationTest {
         }
     }
 
-    List<BattleFighterDto> create(int size) {
-        var destinyDate = createDestinyDate();
-        given(gameInformationServiceMock.getCurrentDate(GAME_ID)).willReturn(destinyDate);
-        List<BattleFighterDto> fighters = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            var personDto = personFactory.create(RaceEnum.HUMAN, 1L);
-            var fighter = fighterFactory.create(personDto, 1L);
-            fighters.add(fighter);
-        }
-
-        return fighters;
-    }
-
-    private void executeBattles(List<BattleFighterDto> list, List<BattleFighterDto> winners) {
-        for (int i = 0; i < list.size(); i += 2) {
-            BattleFighterDto battleFighterDto = list.get(i);
-            refresh(battleFighterDto);
-            BattleFighterDto battleFighterDto2 = list.get(i + 1);
-            refresh(battleFighterDto2);
-
-            var battleDto = createBattleDto(battleFighterDto, battleFighterDto2);
-            BattleDto res = simulationBattleExecutor.execute(battleDto);
-            var winner = res.getSummary().getWinners().get(0);
-            refresh(winner);
-            winners.add(winner);
-            refresh(battleFighterDto2);
-        }
-    }
-
     private void refresh(BattleFighterDto battleFighterDto) {
         CharacteristicsDto characteristics = battleFighterDto.getCharacteristics();
         int speed = characteristics.getSpeed();
@@ -270,13 +219,5 @@ public class Battle extends AbstractIntegrationTest {
         return BattleBuilder.initWith(BattleType.DUEL_SINGLE_CELL)
                 .addFighters(battleFighterDto, battleFighterDto2)
                 .build();
-    }
-
-    private DestinyDate createDestinyDate() {
-        var destinyDate = new DestinyDate();
-        destinyDate.setDay(1);
-        destinyDate.setMonth(1);
-        destinyDate.setYear(1);
-        return destinyDate;
     }
 }

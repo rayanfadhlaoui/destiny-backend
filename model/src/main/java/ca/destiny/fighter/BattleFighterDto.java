@@ -1,10 +1,10 @@
 package ca.destiny.fighter;
 
-import ca.destiny.fighter.bodypart.BodyPartDto;
 import ca.destiny.fighter.equipment.EquipmentDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.person.PersonDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BattleFighterDto {
@@ -16,6 +16,7 @@ public class BattleFighterDto {
     private EquipmentDto equipmentDto;
     private ExperienceDto experience;
     private ClassEnum classEnum;
+    private List<SpecialisationEnum> specialisations = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -79,5 +80,17 @@ public class BattleFighterDto {
 
     public void setEquipmentDto(EquipmentDto equipmentDto) {
         this.equipmentDto = equipmentDto;
+    }
+
+    public List<SpecialisationEnum> getSpecialisations() {
+        return specialisations;
+    }
+
+    public void addSpecialisation(SpecialisationEnum specialisationEnum) {
+        specialisations.add(specialisationEnum);
+    }
+
+    public void setSpecialisations(List<SpecialisationEnum> specialisations) {
+        this.specialisations = specialisations;
     }
 }

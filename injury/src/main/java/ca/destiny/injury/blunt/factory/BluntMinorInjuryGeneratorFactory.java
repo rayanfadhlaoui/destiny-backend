@@ -1,10 +1,10 @@
 package ca.destiny.injury.blunt.factory;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
+import ca.destiny.injury.blunt.InjuryGenerator;
 import ca.destiny.injury.blunt.generator.body.BodyMinorBluntInjuryGenerator;
 import ca.destiny.injury.blunt.generator.head.HeadMinorBluntInjuryGenerator;
 import ca.destiny.injury.blunt.generator.legorarm.LegOrArmMinorBluntInjuryGenerator;
-import ca.destiny.injury.injury.InjuryGenerator;
 
 public class BluntMinorInjuryGeneratorFactory extends AbstractBluntInjuryGeneratorFactory {
     @Override

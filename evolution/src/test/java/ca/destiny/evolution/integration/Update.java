@@ -1,7 +1,7 @@
 package ca.destiny.evolution.integration;
 
 import ca.destiny.ApplicationTest;
-import ca.destiny.destinytest.AbstractIntegrationTest;
+import ca.destiny.destinytest.AbstractIntegration;
 import ca.destiny.evolution.creation.bodypart.BodyPartFactory;
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.bodypart.BodyPartDto;
@@ -21,12 +21,16 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @Import(EvolutionConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ApplicationTest.class)
-public class Update extends AbstractIntegrationTest {
+public class Update extends AbstractIntegration {
 
     @Autowired
     private RandomNumberGeneratorService randomNumberGeneratorService;
     @Autowired
     private BodyPartFactory bodyPartFactory;
+
+    public Update() {
+        super(Update.class);
+    }
 
     @Test
     void update() throws IOException, URISyntaxException {
@@ -41,6 +45,6 @@ public class Update extends AbstractIntegrationTest {
         });
         fighters.size();
 
-        writeData(fighters, "thirdClassUpdated.json");
+        writeData(fighters, "thirdClass.json");
     }
 }

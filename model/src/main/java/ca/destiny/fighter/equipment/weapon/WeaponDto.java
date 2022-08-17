@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(SwordDto.class)}
-)
+        @JsonSubTypes.Type(SwordDto.class),
+        @JsonSubTypes.Type(AxeDto.class),
+        @JsonSubTypes.Type(FistDto.class),
+        @JsonSubTypes.Type(DaggerDto.class)})
 public abstract class WeaponDto {
 
     private String name;
-    private AbilityWeight abilityWeight;
+    private AbilityBonus abilityBonus;
     private int minimumDamage;
     private int maximumDamage;
     private int penetration;
@@ -20,13 +22,7 @@ public abstract class WeaponDto {
 
     public abstract WeaponType getWeaponType();
 
-    public AbilityWeight getAbilityWeight() {
-        return abilityWeight;
-    }
-
-    public void setAbilityWeight(AbilityWeight abilityWeight) {
-        this.abilityWeight = abilityWeight;
-    }
+    public abstract AbilityWeight getAbilityWeight();
 
     public String getName() {
         return name;
@@ -66,5 +62,13 @@ public abstract class WeaponDto {
 
     public void setBlunt(int blunt) {
         this.blunt = blunt;
+    }
+
+    public AbilityBonus getAbilityBonus() {
+        return abilityBonus;
+    }
+
+    public void setAbilityBonus(AbilityBonus abilityBonus) {
+        this.abilityBonus = abilityBonus;
     }
 }

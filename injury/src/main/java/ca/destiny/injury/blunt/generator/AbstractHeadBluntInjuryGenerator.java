@@ -1,10 +1,10 @@
 package ca.destiny.injury.blunt.generator;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
-import ca.destiny.fighter.bodypart.Injury;
-import ca.destiny.injury.injury.AbstractInjuryGenerator;
-import ca.destiny.injury.injury.blunt.*;
-import ca.destiny.injury.injury.blunt.type.BluntHeadInjuryType;
+import ca.destiny.fighter.injury.Injury;
+import ca.destiny.fighter.injury.*;
+import ca.destiny.fighter.injury.type.BluntHeadInjuryType;
+import ca.destiny.injury.AbstractInjuryGenerator;
 
 import java.util.Optional;
 

@@ -1,9 +1,8 @@
 package ca.destiny.injury.blunt.generator.head;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
+import ca.destiny.fighter.injury.type.BluntHeadInjuryType;
 import ca.destiny.injury.blunt.generator.AbstractHeadBluntInjuryGenerator;
-import ca.destiny.injury.injury.blunt.type.BluntArmOrLegInjuryType;
-import ca.destiny.injury.injury.blunt.type.BluntHeadInjuryType;
 
 public class HeadModerateBluntInjuryGenerator extends AbstractHeadBluntInjuryGenerator {
 

@@ -1,5 +1,7 @@
 package ca.destiny.fighter.bodypart;
 
+import ca.destiny.fighter.injury.Injury;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package ca.destiny.injury.blunt.generator.legorarm;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
+import ca.destiny.fighter.injury.type.BluntArmOrLegInjuryType;
 import ca.destiny.injury.blunt.generator.AbstractLegOrArmsBluntInjuryGenerator;
-import ca.destiny.injury.injury.blunt.type.BluntArmOrLegInjuryType;
 
 public class LegOrArmMinorBluntInjuryGenerator extends AbstractLegOrArmsBluntInjuryGenerator {
 

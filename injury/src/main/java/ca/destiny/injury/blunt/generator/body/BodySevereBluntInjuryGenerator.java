@@ -1,8 +1,8 @@
 package ca.destiny.injury.blunt.generator.body;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
+import ca.destiny.fighter.injury.type.BluntBodyInjuryType;
 import ca.destiny.injury.blunt.generator.AbstractBodyBluntInjuryGenerator;
-import ca.destiny.injury.injury.blunt.type.BluntBodyInjuryType;
 
 public class BodySevereBluntInjuryGenerator extends AbstractBodyBluntInjuryGenerator {
     public BodySevereBluntInjuryGenerator(BodyPartDto bodyPart) {

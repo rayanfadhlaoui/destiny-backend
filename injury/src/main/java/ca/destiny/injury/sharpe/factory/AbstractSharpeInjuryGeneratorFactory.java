@@ -1,8 +1,8 @@
 package ca.destiny.injury.sharpe.factory;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
+import ca.destiny.injury.AbstractInjuryGenerator;
 import ca.destiny.injury.InjuryGeneratorFactory;
-import ca.destiny.injury.injury.AbstractInjuryGenerator;
 
 import java.util.function.Supplier;
 

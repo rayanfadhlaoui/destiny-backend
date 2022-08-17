@@ -16,9 +16,9 @@ public class GenderEnhancerProvider {
     public CharacteristicsEnhancer get(GenderEnum genderEnum) {
         switch (genderEnum) {
             case MALE:
-                return new GenderEnhancer(3, 1, randomNumberGeneratorService);
+                return new GenderEnhancer(2, 1, randomNumberGeneratorService);
             case FEMALE:
-                return new GenderEnhancer(1, 3, randomNumberGeneratorService);
+                return new GenderEnhancer(1, 2, randomNumberGeneratorService);
             default:
                 throw new IllegalArgumentException("No enhancer for genderEnum :" + genderEnum);
         }

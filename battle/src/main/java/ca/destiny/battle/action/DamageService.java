@@ -1,6 +1,8 @@
 package ca.destiny.battle.action;
 
 import ca.destiny.fighter.BattleFighterDto;
+import ca.destiny.other.Range;
+import ca.destiny.weapon.WeaponDamageService;
 
 public class DamageService {
 

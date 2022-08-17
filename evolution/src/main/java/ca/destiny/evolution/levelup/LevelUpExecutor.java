@@ -42,6 +42,7 @@ public class LevelUpExecutor {
         enhancers.add(characteristicsEnhancerProvider.getForClass(battleFighterDto.getClassEnum()));
         enhancers.add(characteristicsEnhancerProvider.getForRace(person.getRace()));
         enhancers.add(characteristicsEnhancerProvider.getForGender(person.getGender()));
+        enhancers.addAll(characteristicsEnhancerProvider.getForSpecialisation(battleFighterDto.getSpecialisations()));
         return enhancers;
     }
 }

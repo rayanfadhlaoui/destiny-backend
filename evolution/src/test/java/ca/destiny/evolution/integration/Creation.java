@@ -1,7 +1,7 @@
 package ca.destiny.evolution.integration;
 
 import ca.destiny.ApplicationTest;
-import ca.destiny.destinytest.AbstractIntegrationTest;
+import ca.destiny.destinytest.AbstractIntegration;
 import ca.destiny.evolution.creation.FighterFactory;
 import ca.destiny.evolution.creation.PersonFactory;
 import ca.destiny.fighter.BattleFighterDto;
@@ -29,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 @Import(EvolutionConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ApplicationTest.class)
-public class Creation extends AbstractIntegrationTest {
+public class Creation extends AbstractIntegration {
 
     public static final long GAME_ID = 1L;
     @Autowired
@@ -39,6 +39,10 @@ public class Creation extends AbstractIntegrationTest {
 
     @Autowired
     private GameInformationService gameInformationServiceMock;
+
+    public Creation() {
+        super(Creation.class);
+    }
 
     @Test
     @Disabled
@@ -60,9 +64,7 @@ public class Creation extends AbstractIntegrationTest {
     void updateAddSword() throws IOException, URISyntaxException {
         List<WeaponDto> weapons = loadListFromFile("weapon.json", new TypeReference<>() {
         });
-        List<BattleFighterDto> fighters = loadListFromFile("winners.json", new TypeReference<>() {
-        });
-        List<BattleFighterDto> fighters2 = loadListFromFile("apprenticeUpdated.json", new TypeReference<>() {
+        List<BattleFighterDto> fighters = loadListFromFile("thirdClass.json", new TypeReference<>() {
         });
         WeaponDto weaponDto = weapons.get(0);
 
@@ -73,8 +75,7 @@ public class Creation extends AbstractIntegrationTest {
         });
 
         System.out.println(fighters.size());
-        fighters.addAll(fighters2);
-        writeData(fighters, "fighters.json");
+        writeData(fighters, "thirdClass.json");
     }
 
 

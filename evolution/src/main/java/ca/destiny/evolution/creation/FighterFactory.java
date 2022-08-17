@@ -3,13 +3,13 @@ package ca.destiny.evolution.creation;
 import ca.destiny.evolution.levelup.LevelUpExecutor;
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.CharacteristicsDto;
+import ca.destiny.fighter.ClassEnum;
 import ca.destiny.fighter.equipment.EquipmentDto;
-import ca.destiny.fighter.equipment.weapon.AbilityWeight;
+import ca.destiny.fighter.equipment.weapon.AbilityBonus;
 import ca.destiny.fighter.equipment.weapon.FistDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.other.RandomNumberGeneratorService;
 import ca.destiny.person.PersonDto;
-import ca.destiny.fighter.ClassEnum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -50,12 +50,12 @@ public class FighterFactory {
         FistDto rightWeapon = new FistDto();
         rightWeapon.setName("Bare hand");
         rightWeapon.setMinimumDamage(1);
+        AbilityBonus abilityBonus = new AbilityBonus();
+        abilityBonus.setStrength(0);
+        abilityBonus.setSpeed(0);
+        abilityBonus.setDexterity(0);
+        rightWeapon.setAbilityBonus(abilityBonus);
         rightWeapon.setMaximumDamage(6);
-        AbilityWeight abilityWeight = new AbilityWeight();
-        abilityWeight.setDexterity(34);
-        abilityWeight.setSpeed(33);
-        abilityWeight.setStrength(33);
-        rightWeapon.setAbilityWeight(abilityWeight);
         rightWeapon.setBlunt(1);
         rightWeapon.setPenetration(0);
         equipmentDto.setRightWeapon(rightWeapon);

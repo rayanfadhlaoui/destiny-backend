@@ -1,0 +1,112 @@
+[
+  {
+    "id": 2,
+    "idMainUser": 1,
+    "person": {
+      "id": 0,
+      "firstName": "Danielle",
+      "lastName": "Hill",
+      "destinyDate": {
+        "day": 1,
+        "month": 1,
+        "year": 1
+      },
+      "originTown": {
+        "name": "Whutchan"
+      },
+      "age": 39,
+      "gender": "FEMALE",
+      "availableBodyParts": [
+        {
+          "type": "HEAD",
+          "injuries": []
+        },
+        {
+          "type": "BODY",
+          "injuries": []
+        },
+        {
+          "type": "LEFT_ARM",
+          "injuries": []
+        },
+        {
+          "type": "LEFT_LEG",
+          "injuries": []
+        },
+        {
+          "type": "LEFT_FEET",
+          "injuries": []
+        },
+        {
+          "type": "RIGHT_ARM",
+          "injuries": []
+        },
+        {
+          "type": "RIGHT_LEG",
+          "injuries": []
+        },
+        {
+          "type": "RIGHT_FEET",
+          "injuries": []
+        }
+      ],
+      "race": "HUMAN"
+    },
+    "characteristics": {
+      "id": 0,
+      "strength": 373,
+      "speed": 390,
+      "dexterity": 471,
+      "defense": 305,
+      "vitality": 2156,
+      "resistance": 83,
+      "courage": 286,
+      "dodge": 344,
+      "stamina": 285
+    },
+    "battleInformation": {
+      "vitality": 2156,
+      "dexterity": 471,
+      "dodge": 344,
+      "strength": 373,
+      "resistance": 83,
+      "defense": 305,
+      "speed": 390
+    },
+    "equipmentDto": {
+      "rightWeapon": {
+        "@type": "DaggerDto",
+        "name": "Ramuh",
+        "abilityBonus": {
+          "strength": 100,
+          "dexterity": 100,
+          "speed": 100
+        },
+        "minimumDamage": 200,
+        "maximumDamage": 250,
+        "penetration": 1,
+        "blunt": 0,
+        "abilityWeight": {
+          "strength": 10,
+          "dexterity": 65,
+          "speed": 30
+        },
+        "weaponType": "DAGGER"
+      }
+    },
+    "experience": {
+      "level": 78,
+      "currentExperience": 45383,
+      "worth": 12169,
+      "nextLevel": 66135
+    },
+    "classEnum": "GRAND_ADMIRAL",
+    "specialisations": [
+      "SPEED",
+      "STRENGTH",
+      "STRENGTH",
+      "DEFENSE",
+      "DODGE"
+    ]
+  }
+]

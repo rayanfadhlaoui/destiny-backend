@@ -1,8 +1,8 @@
 package ca.destiny.injury.blunt.generator;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
-import ca.destiny.injury.injury.AbstractInjuryGenerator;
-import ca.destiny.injury.injury.InjuryGenerator;
+import ca.destiny.injury.AbstractInjuryGenerator;
+import ca.destiny.injury.blunt.InjuryGenerator;
 import ca.destiny.other.RandomNumberGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;

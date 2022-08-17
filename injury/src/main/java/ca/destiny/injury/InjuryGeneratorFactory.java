@@ -1,7 +1,7 @@
 package ca.destiny.injury;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
-import ca.destiny.injury.injury.InjuryGenerator;
+import ca.destiny.injury.blunt.InjuryGenerator;
 
 import java.util.function.Supplier;
 

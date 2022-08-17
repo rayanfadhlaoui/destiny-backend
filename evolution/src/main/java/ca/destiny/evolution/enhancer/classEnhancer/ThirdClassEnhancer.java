@@ -6,15 +6,16 @@ import ca.destiny.other.RandomNumberGeneratorService;
 public class ThirdClassEnhancer extends CharacteristicsEnhancer {
     public ThirdClassEnhancer(RandomNumberGeneratorService randomNumberGeneratorService) {
         super(randomNumberGeneratorService);
-        this.strength = 3;
-        this.speed = 3;
-        this.dexterity = 3;
-        this.defense = 3;
+        int bonus1 = 3;
+        int bonus2 = 1;
+        this.strength = bonus1;
+        this.speed = bonus1;
+        this.dexterity = bonus1;
+        this.courage = bonus1;
+        this.stamina = bonus1;
+        this.defense = bonus2;
+        this.dodge = bonus2;
         this.vitality = 15;
-        this.courage = 3;
-        this.dodge = 3;
         this.resistance = 1;
-        this.stamina = 3;
-        this.speed = 2;
     }
 }

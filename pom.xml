@@ -24,6 +24,8 @@
         <module>application</module>
         <module>destinyTest</module>
         <module>injury</module>
+        <module>weapon</module>
+        <module>exam</module>
     </modules>
 
     <dependencyManagement>

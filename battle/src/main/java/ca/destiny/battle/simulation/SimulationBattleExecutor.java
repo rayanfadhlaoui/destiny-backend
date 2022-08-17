@@ -32,7 +32,6 @@ public class SimulationBattleExecutor extends BattleExecutor {
             isOver = isFightOver(battleDto);
             battleDto.incrementTurn();
         }
-
         return battleDto;
     }
 

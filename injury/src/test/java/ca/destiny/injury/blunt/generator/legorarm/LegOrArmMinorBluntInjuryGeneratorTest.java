@@ -1,7 +1,7 @@
 package ca.destiny.injury.blunt.generator.legorarm;
 
 import ca.destiny.injury.blunt.generator.InjuryGeneratorTest;
-import ca.destiny.injury.injury.InjuryGenerator;
+import ca.destiny.injury.blunt.InjuryGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

@@ -5,6 +5,7 @@ import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.equipment.EquipmentDto;
 import ca.destiny.fighter.equipment.weapon.AbilityWeight;
 import ca.destiny.fighter.equipment.weapon.FistDto;
+import ca.destiny.other.Range;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,11 +54,6 @@ class DamageServiceTest {
         BattleFighterDto battleFighterDto = new BattleFighterDto();
         EquipmentDto equipmentDto = new EquipmentDto();
         FistDto rightWeapon = new FistDto();
-        AbilityWeight abilityWeight = new AbilityWeight();
-        abilityWeight.setSpeed(33);
-        abilityWeight.setDexterity(33);
-        abilityWeight.setStrength(34);
-        rightWeapon.setAbilityWeight(abilityWeight);
         rightWeapon.setMinimumDamage(10);
         rightWeapon.setMaximumDamage(20);
         equipmentDto.setRightWeapon(rightWeapon);

@@ -31,7 +31,7 @@ class DuelSingleCellActionBattleVisitorTest {
         Action action = actionBattleVisitor.getAction();
         assertThat(action).isInstanceOf(AttackAction.class);
         AttackAction attackAction = (AttackAction) action;
-        assertThat(attackAction).isEqualToComparingFieldByFieldRecursively(new AttackAction(randomNumberGeneratorService, injuryService, activeFighter, inactiveFighter));
+        assertThat(attackAction).isEqualToComparingFieldByFieldRecursively(new NormalAttackAction(randomNumberGeneratorService, injuryService, activeFighter, inactiveFighter));
     }
 
     private BattleFighterDto createFighterDto(int id) {

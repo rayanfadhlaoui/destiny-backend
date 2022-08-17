@@ -24,9 +24,9 @@ public class ExperienceService {
         int worth = experience.getWorth();
         while (currentExperience >= nextLevel) {
             currentExperience -= nextLevel;
-            int delta = nextLevel / 10;
-            nextLevel = randomNumberGeneratorService.getRandomNumberInts(nextLevel + delta, nextLevel * 2);
-            worth += nextLevel / 10;
+            int delta = (nextLevel / 10) + 100;
+            worth += (nextLevel / 100);
+            nextLevel = randomNumberGeneratorService.getRandomNumberInts(nextLevel + 100, nextLevel + delta);
             levelUp++;
         }
 

@@ -4,10 +4,10 @@ import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.injury.InjuryService;
-import ca.destiny.injury.model.FighterInjuryInformation;
 import ca.destiny.other.RandomNumberGeneratorService;
+import ca.destiny.other.Range;
 
-public class AttackAction implements Action {
+public abstract class AttackAction implements Action {
     private final HitService hitService;
     private final DamageService damageService;
     private final RandomNumberGeneratorService randomNumberGeneratorService;
@@ -37,8 +37,8 @@ public class AttackAction implements Action {
             int vitality = currentVitality - damage;
             defensiveBattleInformation.setVitality(vitality);
             ifWonAddExperience(vitality);
-            var fighterInjuryInformation = new FighterInjuryInformation(damage, defensiveBattleFighter);
-            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, activeBattleFighter.getEquipmentDto().getRightWeapon());
+//            var fighterInjuryInformation = new FighterInjuryInformation(damage, defensiveBattleFighter);
+//            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, activeBattleFighter.getEquipmentDto().getRightWeapon());
         }
         return false;
     }
@@ -46,15 +46,22 @@ public class AttackAction implements Action {
     private int getDamage(BattleInformation defensiveBattleInformation) {
         int defense = defensiveBattleInformation.getDefense();
         Range range = damageService.getDamage(activeBattleFighter, defense);
-        return randomNumberGeneratorService.getRandomNumberInts(range.getLeft(), range.getRight());
+        int damage = randomNumberGeneratorService.getRandomNumberInts(range.getLeft(), range.getRight());
+        damage = applyDamageBonus(damage);
+        return damage;
     }
 
     private boolean fighterHasHit(BattleInformation activeBattleInformation, BattleInformation defensiveBattleInformation) {
         int dexterity = activeBattleInformation.getDexterity();
         int dodge = defensiveBattleInformation.getDodge();
         int hitPercentage = hitService.hitPercentage(dexterity, dodge);
-        return randomNumberGeneratorService.getRandomNumberInts(0, 100) <= hitPercentage;
+        hitPercentage = applyAccuracyBonus(hitPercentage);
+        return randomNumberGeneratorService.getRandomNumberInts(0, 1000) <= hitPercentage;
     }
+
+    protected abstract int applyAccuracyBonus(int hitPercentage);
+
+    protected abstract int applyDamageBonus(int damage);
 
     private void ifWonAddExperience(int vitality) {
         if (vitality <= 0) {

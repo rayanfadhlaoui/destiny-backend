@@ -1,7 +1,7 @@
 package ca.destiny.evolution.integration;
 
 import ca.destiny.ApplicationTest;
-import ca.destiny.destinytest.AbstractIntegrationTest;
+import ca.destiny.destinytest.AbstractIntegration;
 import ca.destiny.evolution.levelup.ExperienceService;
 import ca.destiny.fighter.BattleFighterDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -21,11 +21,15 @@ import java.util.List;
 @Import(EvolutionConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ApplicationTest.class)
 @Disabled
-public class LevelUp extends AbstractIntegrationTest {
+public class LevelUp extends AbstractIntegration {
 
     public static final long GAME_ID = 1L;
     @Autowired
     private ExperienceService experienceService;
+
+    public LevelUp() {
+        super(LevelUp.class);
+    }
 
     @Test
     void levelUp() throws IOException, URISyntaxException {

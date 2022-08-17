@@ -3,5 +3,21 @@ package ca.destiny.fighter;
 public enum ClassEnum {
     NO_CLASS,
     APPRENTICE,
-    THIRD_CLASS;
+    THIRD_CLASS,
+    SECOND_CLASS,
+    FIRST_CLASS,
+    SERGEANT,
+    SERGEANT_MAYOR,
+    WARRANT_OFFICER,
+    OFFICER,
+    JUNIOR_LIEUTENANT,
+    LIEUTENANT,
+    FIRST_LIEUTENANT,
+    MAYOR,
+    COLONEL,
+    REAR_ADMIRAL,
+    SUB_ADMIRAL,
+    VICE_ADMIRAL,
+    ADMIRAL,
+    GRAND_ADMIRAL;
 }
