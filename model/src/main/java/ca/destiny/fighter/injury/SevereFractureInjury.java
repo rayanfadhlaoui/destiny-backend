@@ -1,6 +1,16 @@
 package ca.destiny.fighter.injury;
 
-public class SevereFractureInjury implements Injury {
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("SevereFractureInjury")
+public class SevereFractureInjury extends Injury {
+    public SevereFractureInjury() {
+
+    }
+    public SevereFractureInjury(int deathProbability, int lastingDays) {
+        super(deathProbability, lastingDays);
+    }
+
     @Override
     public String getName() {
         return "Severe fracture";
@@ -8,6 +18,6 @@ public class SevereFractureInjury implements Injury {
 
     @Override
     public int getPain() {
-        return 20;
+        return 75;
     }
 }

@@ -18,6 +18,6 @@ public class StatusBattleVisitor implements BattleVisitor {
 
     private boolean isAlive(BattleFighterDto fighter) {
         BattleInformation battleInformation = fighter.getBattleInformation();
-        return battleInformation.getVitality() > 0;
+        return battleInformation.getVitality() > 0 && battleInformation.getFightingStatus().canFight();
     }
 }

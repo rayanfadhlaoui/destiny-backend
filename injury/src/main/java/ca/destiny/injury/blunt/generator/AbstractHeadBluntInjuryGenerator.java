@@ -19,17 +19,17 @@ public abstract class AbstractHeadBluntInjuryGenerator extends AbstractInjuryGen
         Injury injury;
         int severity = randomNumberGeneratorService.getRandomNumberInts(0, 100) + penalty;
         if (severity <= getProbability(BluntHeadInjuryType.SUPERFICIAL_BRUISE)) {
-            injury = new SuperficialBruiseInjury();
+            injury = new SuperficialBruiseInjury(0,5);
         } else if (severity <= getProbability(BluntHeadInjuryType.MINOR_BRUISE)) {
-            injury = new MinorBruiseInjury();
+            injury = new MinorBruiseInjury(2,10);
         } else if (severity <= getProbability(BluntHeadInjuryType.SEVERE_BRUISE)) {
-            injury = new SevereBruiseInjury();
+            injury = new SevereBruiseInjury(4,15);
         } else if (severity <= getProbability(BluntHeadInjuryType.MINOR_FRACTURE)) {
-            injury = new MinorFractureInjury();
+            injury = new MinorFractureInjury(8,30);
         } else if (severity <= getProbability(BluntHeadInjuryType.SEVERE_FRACTURE)) {
-            injury = new SevereFractureInjury();
+            injury = new SevereFractureInjury(10,90);
         } else {
-            injury = new BrokenBoneInjury();
+            injury = new BrokenBoneInjury(15,120);
         }
         return Optional.of(injury);
     }

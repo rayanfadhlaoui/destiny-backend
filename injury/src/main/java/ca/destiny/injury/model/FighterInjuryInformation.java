@@ -23,6 +23,10 @@ public class FighterInjuryInformation {
         this.damagePercentage = ((damage * 100) / maxVitality);
     }
 
+    public BattleInformation getBattleInformation() {
+        return battleInformation;
+    }
+
     public int getDamagePercentage() {
         return damagePercentage;
     }

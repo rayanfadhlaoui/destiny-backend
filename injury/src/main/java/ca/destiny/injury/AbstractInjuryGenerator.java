@@ -1,5 +1,6 @@
 package ca.destiny.injury;
 
+import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.bodypart.BodyPartDto;
 import ca.destiny.fighter.injury.Injury;
 import ca.destiny.injury.blunt.InjuryGenerator;
@@ -18,12 +19,13 @@ public abstract class AbstractInjuryGenerator implements InjuryGenerator {
     }
 
     @Override
-    public void inflict(boolean knockout) {
+    public void inflict(boolean knockout, BattleInformation battleInformation, FightStatusUpdater fightStatusUpdater) {
         int penalty = knockout ? getPenalty() : 0;
         Optional<Injury> optionalInjury = getOptionalInjury(penalty);
         optionalInjury.ifPresent(injury -> {
             if (bodyPart != null) {
                 bodyPart.addInjury(injury);
+                fightStatusUpdater.update(injury, battleInformation);
             }
         });
     }

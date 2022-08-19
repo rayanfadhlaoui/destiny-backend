@@ -7,7 +7,10 @@ public class BattleInformation {
     private int strength;
     private int resistance;
     private int defense;
+    private int courage;
     private int speed;
+    private FightingStatus fightingStatus = new FightingStatus();
+    private Penalty penalty;
 
     public int getVitality() {
         return vitality;
@@ -63,5 +66,30 @@ public class BattleInformation {
 
     public void setResistance(int resistance) {
         this.resistance = resistance;
+    }
+
+    public int getCourage() {
+        return courage;
+    }
+
+    public void setCourage(int courage) {
+        this.courage = courage;
+    }
+
+    public FightingStatus getFightingStatus() {
+        return fightingStatus;
+    }
+
+    public void setFightingStatus(FightingStatus fightingStatus) {
+        this.fightingStatus = fightingStatus;
+    }
+
+
+    public Penalty getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Penalty penalty) {
+        this.penalty = penalty;
     }
 }

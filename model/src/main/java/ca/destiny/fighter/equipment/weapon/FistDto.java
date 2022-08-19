@@ -9,9 +9,9 @@ public class FistDto extends WeaponDto {
 
     static {
         FIST_WEIGHT = new AbilityWeight();
-        FIST_WEIGHT.setStrength(40);
-        FIST_WEIGHT.setDexterity(30);
-        FIST_WEIGHT.setSpeed(30);
+        FIST_WEIGHT.setStrength(30);
+        FIST_WEIGHT.setDexterity(10);
+        FIST_WEIGHT.setSpeed(60);
     }
 
     @Override

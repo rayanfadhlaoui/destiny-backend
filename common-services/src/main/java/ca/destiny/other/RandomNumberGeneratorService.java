@@ -16,6 +16,9 @@ public class RandomNumberGeneratorService {
     public int getRandomNumberInts(int min, int max) {
         return random.ints(min, (max + 1))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Random number badly generated"));
+                .orElseGet(() -> {
+                    System.out.println("RandomNumberGeneratorService --> error on " + min + "||" + max);
+                    return 0;
+                });
     }
 }

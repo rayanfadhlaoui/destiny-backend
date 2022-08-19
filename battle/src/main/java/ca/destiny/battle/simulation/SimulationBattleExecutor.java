@@ -26,7 +26,7 @@ public class SimulationBattleExecutor extends BattleExecutor {
 
     @Override
     protected BattleDto customExecute(BattleDto battleDto) {
-        boolean isOver = false;
+        boolean isOver = isFightOver(battleDto);
         while (!isOver) {
             executeAction(battleDto);
             isOver = isFightOver(battleDto);

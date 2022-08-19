@@ -1,7 +1,6 @@
 package ca.destiny.injury.blunt.generator;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
-import ca.destiny.fighter.injury.Injury;
 import ca.destiny.fighter.injury.*;
 import ca.destiny.fighter.injury.type.BluntArmOrLegInjuryType;
 import ca.destiny.injury.AbstractInjuryGenerator;
@@ -20,19 +19,19 @@ public abstract class AbstractLegOrArmsBluntInjuryGenerator extends AbstractInju
         Injury injury;
         int severity = randomNumberGeneratorService.getRandomNumberInts(0, 100) + penalty;
         if (severity <= getProbability(BluntArmOrLegInjuryType.SUPERFICIAL_BRUISE)) {
-            injury = new SuperficialBruiseInjury();
+            injury = new SuperficialBruiseInjury(0, 1);
         } else if (severity <= getProbability(BluntArmOrLegInjuryType.MINOR_BRUISE)) {
-            injury = new MinorBruiseInjury();
+            injury = new MinorBruiseInjury(0, 2);
         } else if (severity <= getProbability(BluntArmOrLegInjuryType.SEVERE_BRUISE)) {
-            injury = new SevereBruiseInjury();
+            injury = new SevereBruiseInjury(0, 5);
         } else if (severity <= getProbability(BluntArmOrLegInjuryType.MINOR_FRACTURE)) {
-            injury = new MinorFractureInjury();
+            injury = new MinorFractureInjury(0, 15);
         } else if (severity <= getProbability(BluntArmOrLegInjuryType.SEVERE_FRACTURE)) {
-            injury = new SevereFractureInjury();
+            injury = new SevereFractureInjury(0, 30);
         } else if (severity <= getProbability(BluntArmOrLegInjuryType.DISLOCATION)) {
-            injury = new DislocationInjury();
+            injury = new DislocationInjury(0, 30);
         } else {
-            injury = new BrokenBoneInjury();
+            injury = new BrokenBoneInjury(0, 60);
         }
         return Optional.of(injury);
     }

@@ -26,6 +26,7 @@
         <module>injury</module>
         <module>weapon</module>
         <module>exam</module>
+        <module>war</module>
     </modules>
 
     <dependencyManagement>

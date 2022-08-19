@@ -1,6 +1,16 @@
 package ca.destiny.fighter.injury;
 
-public class SuperficialBruiseInjury implements Injury {
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("SuperficialBruiseInjury")
+public class SuperficialBruiseInjury extends Injury {
+
+    public SuperficialBruiseInjury() {
+
+    }
+    public SuperficialBruiseInjury(int deathProbability, int lastingDays) {
+        super(deathProbability, lastingDays);
+    }
 
     @Override
     public String getName() {

@@ -25,8 +25,13 @@ public class ExperienceService {
         while (currentExperience >= nextLevel) {
             currentExperience -= nextLevel;
             int delta = (nextLevel / 10) + 100;
-            worth += (nextLevel / 100);
-            nextLevel = randomNumberGeneratorService.getRandomNumberInts(nextLevel + 100, nextLevel + delta);
+            worth += (nextLevel / 50);
+            try {
+                nextLevel = randomNumberGeneratorService.getRandomNumberInts(nextLevel + 10, nextLevel + delta);
+
+            } catch (IllegalArgumentException e) {
+                System.out.println((nextLevel+10)+"," +(nextLevel + delta));
+            }
             levelUp++;
         }
 

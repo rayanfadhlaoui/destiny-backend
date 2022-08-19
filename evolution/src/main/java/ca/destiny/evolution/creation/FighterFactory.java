@@ -10,18 +10,29 @@ import ca.destiny.fighter.equipment.weapon.FistDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.other.RandomNumberGeneratorService;
 import ca.destiny.person.PersonDto;
+import ca.destiny.person.common.RaceEnum;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class FighterFactory {
     private long lastId = 1L;
 
     private final RandomNumberGeneratorService randomNumberGeneratorService;
+    private final PersonalImprovementService personalImprovementService;
+    private final PersonFactory personFactory;
     private final LevelUpExecutor levelUpExecutor;
 
     public FighterFactory(RandomNumberGeneratorService randomNumberGeneratorService,
+                          PersonalImprovementService personalImprovementService,
+                          PersonFactory personFactory,
                           LevelUpExecutor levelUpExecutor) {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
+        this.personalImprovementService = personalImprovementService;
+        this.personFactory = personFactory;
         this.levelUpExecutor = levelUpExecutor;
     }
 
@@ -31,6 +42,12 @@ public class FighterFactory {
         return battleFighter;
     }
 
+    public List<BattleFighterDto> create(int amount) {
+        return IntStream.range(0, amount)
+                .mapToObj(v -> personFactory.create(RaceEnum.HUMAN, 1L))
+                .map(p -> create(p, 1L))
+                .collect(Collectors.toList());
+    }
 
     private BattleFighterDto createFighter(PersonDto person, Long userId) {
         BattleFighterDto fighterEntity = new BattleFighterDto();
@@ -68,6 +85,7 @@ public class FighterFactory {
         experienceDto.setWorth(10);
         experienceDto.setNextLevel(randomNumberGeneratorService.getRandomNumberInts(10, 100));
         experienceDto.setCurrentExperience(0);
+        experienceDto.setPersonalImprovement(personalImprovementService.createRandom());
         return experienceDto;
     }
 

@@ -36,7 +36,7 @@ public abstract class InjuryGeneratorTest {
     }
 
     protected void assertInjuryNameIs(boolean isKnockout, String injuryName) {
-        injuryGenerator.inflict(isKnockout);
+        injuryGenerator.inflict(isKnockout, null, null);
         assertThat(bodyPart.getInjuries().get(0).getName()).isEqualTo(injuryName);
     }
 }

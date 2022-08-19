@@ -19,7 +19,8 @@ public class HumanPersonFactory {
 
     public HumanPersonFactory(HumanNameProvider humanNameProvider,
                               GameInformationService gameInformationService,
-                              BodyPartFactory bodyPartFactory, RandomNumberGeneratorService randomNumberGeneratorService) {
+                              BodyPartFactory bodyPartFactory,
+                              RandomNumberGeneratorService randomNumberGeneratorService) {
         this.humanNameProvider = humanNameProvider;
         this.gameInformationService = gameInformationService;
         this.bodyPartFactory = bodyPartFactory;
@@ -41,7 +42,7 @@ public class HumanPersonFactory {
         personDto.setLastName(lastName);
         personDto.setGender(gender);
         OriginTown originTown = new OriginTown();
-        originTown.setName("Whutchan");
+        originTown.setName("Suspicion dark");
         personDto.setOriginTown(originTown);
         personDto.setAvailableBodyParts(bodyPartFactory.create());
         personDto.setDestinyDate(gameInformationService.getCurrentDate(gameId));

@@ -2,8 +2,10 @@ package ca.destiny.battle.action;
 
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.BattleInformation;
+import ca.destiny.fighter.FightingStatus;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.injury.InjuryService;
+import ca.destiny.injury.model.FighterInjuryInformation;
 import ca.destiny.other.RandomNumberGeneratorService;
 import ca.destiny.other.Range;
 
@@ -36,9 +38,10 @@ public abstract class AttackAction implements Action {
             int currentVitality = defensiveBattleInformation.getVitality();
             int vitality = currentVitality - damage;
             defensiveBattleInformation.setVitality(vitality);
-            ifWonAddExperience(vitality);
-//            var fighterInjuryInformation = new FighterInjuryInformation(damage, defensiveBattleFighter);
-//            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, activeBattleFighter.getEquipmentDto().getRightWeapon());
+            var fighterInjuryInformation = new FighterInjuryInformation(damage, defensiveBattleFighter);
+            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, activeBattleFighter.getEquipmentDto().getRightWeapon());
+
+            ifWonAddExperience(vitality, defensiveBattleInformation.getFightingStatus());
         }
         return false;
     }
@@ -63,8 +66,8 @@ public abstract class AttackAction implements Action {
 
     protected abstract int applyDamageBonus(int damage);
 
-    private void ifWonAddExperience(int vitality) {
-        if (vitality <= 0) {
+    private void ifWonAddExperience(int vitality, FightingStatus fightingStatus) {
+        if (vitality <= 0 || !fightingStatus.canFight()) {
             ExperienceDto experience = activeBattleFighter.getExperience();
             int currentExperience = experience.getCurrentExperience();
             int worth = defensiveBattleFighter.getExperience().getWorth();

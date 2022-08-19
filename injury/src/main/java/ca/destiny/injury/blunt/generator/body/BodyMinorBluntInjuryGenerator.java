@@ -2,6 +2,7 @@ package ca.destiny.injury.blunt.generator.body;
 
 import ca.destiny.fighter.bodypart.BodyPartDto;
 import ca.destiny.fighter.injury.type.BluntBodyInjuryType;
+import ca.destiny.injury.FightStatusUpdater;
 import ca.destiny.injury.blunt.generator.AbstractBodyBluntInjuryGenerator;
 
 public class BodyMinorBluntInjuryGenerator extends AbstractBodyBluntInjuryGenerator {

@@ -1,10 +1,9 @@
 package ca.destiny.destinytest;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -12,16 +11,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Scanner;
 
 public abstract class AbstractIntegration {
-    public static final String CLASSPATH = "classpath:";
     public static final String SRC_TEST_RESOURCES = "src/test/resources/";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final ClassLoader classLoader;
 
     public AbstractIntegration(Class<?> aClass) {
         classLoader = aClass.getClassLoader();
+        objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
 
@@ -47,7 +46,7 @@ public abstract class AbstractIntegration {
         return objectMapper.readValue(output, aClass);
     }
 
-    protected <T> void writeData(T pojo, String fileName) throws IOException, URISyntaxException {
+    protected <T> void writeData(T pojo, String fileName) throws IOException {
         String json = objectMapper.writeValueAsString(pojo);
         Path filePath = Path.of(SRC_TEST_RESOURCES + fileName);
         Files.writeString(filePath, json);

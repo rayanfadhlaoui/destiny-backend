@@ -6,6 +6,7 @@ public class ExperienceDto {
     private int currentExperience;
     private int worth;
     private int nextLevel;
+    private PersonalImprovement personalImprovement;
 
     public int getCurrentExperience() {
         return currentExperience;
@@ -37,5 +38,13 @@ public class ExperienceDto {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public PersonalImprovement getPersonalImprovement() {
+        return personalImprovement;
+    }
+
+    public void setPersonalImprovement(PersonalImprovement personalImprovement) {
+        this.personalImprovement = personalImprovement;
     }
 }

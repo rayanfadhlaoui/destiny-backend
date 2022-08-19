@@ -26,9 +26,9 @@ public class WeaponDamageService {
         var abilityBonus = weapon.getAbilityBonus();
         int dexterityWeight = abilityWeight.getDexterity() * (dexterity + abilityBonus.getDexterity());
         int speedWeight = abilityWeight.getSpeed() * (speed + abilityBonus.getSpeed());
-        double strengthWeight = abilityWeight.getStrength() * (strength + abilityBonus.getStrength());
+        double strengthWeight = (abilityWeight.getStrength() *1.1) * (strength + abilityBonus.getStrength());
 
-        double value = (dexterityWeight + speedWeight + strengthWeight) / 120;
+        double value = (dexterityWeight + speedWeight + strengthWeight) / 110;
 
         Double minimum = weapon.getMinimumDamage() + ((value * weapon.getMinimumDamage()) / 25);
         Double maximum = weapon.getMaximumDamage() + ((value * weapon.getMaximumDamage()) / 25);
