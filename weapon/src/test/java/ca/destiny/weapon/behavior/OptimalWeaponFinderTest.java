@@ -1,6 +1,6 @@
 package ca.destiny.weapon.behavior;
 
-import ca.destiny.fighter.CharacteristicsDto;
+import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.equipment.weapon.*;
 import ca.destiny.weapon.WeaponDamageService;
 import org.junit.jupiter.api.Test;
@@ -14,21 +14,20 @@ public class OptimalWeaponFinderTest {
 
     private final OptimalWeaponFinder optimalWeaponFinder = new OptimalWeaponFinder(new WeaponDamageService());
 
-
     @Test
     void findOptimal_WithSameDamage() {
         List<WeaponDto> weapons = Arrays.asList(createAxe(), createDagger(), createSword());
 
-        WeaponDto optimal = optimalWeaponFinder.findOptimal(weapons, createCharacteristics());
+        WeaponDto optimal = optimalWeaponFinder.findOptimal(weapons, createBattleInformation()).get();
         assertThat(optimal).isInstanceOf(DaggerDto.class);
     }
 
-    private CharacteristicsDto createCharacteristics() {
-        CharacteristicsDto characteristicsDto = new CharacteristicsDto();
-        characteristicsDto.setDexterity(100);
-        characteristicsDto.setStrength(50);
-        characteristicsDto.setSpeed(50);
-        return characteristicsDto;
+    private BattleInformation createBattleInformation() {
+        BattleInformation battleInformation = new BattleInformation();
+        battleInformation.setDexterity(100);
+        battleInformation.setStrength(50);
+        battleInformation.setSpeed(50);
+        return battleInformation;
     }
 
     private WeaponDto createSword() {

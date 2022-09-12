@@ -20,4 +20,9 @@ public class MinorFractureInjury extends Injury {
     public int getPain() {
         return 40;
     }
+
+    @Override
+    public int getPenalty() {
+        return 30;
+    }
 }

@@ -16,13 +16,21 @@ public class InjuryGeneratorFactoryProvider {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
     }
 
-    public InjuryGeneratorFactory get(int damagePercentage, FighterInjuryInformation fighterInjuryInformation, WeaponDto weaponDto) {
+    public InjuryGeneratorFactory get(int damagePercentage,
+                                      FighterInjuryInformation fighterInjuryInformation,
+                                      WeaponDto weaponDto) {
         int[] probabilityAndSeverity = computeInjuryProbabilityAndSeverity(damagePercentage);
         int probability = probabilityAndSeverity[0];
         int randomNumber = randomNumberGeneratorService.getRandomNumberInts(0, 100);
-        int resistance = randomNumberGeneratorService.getRandomNumberInts(0, fighterInjuryInformation.getResistance());
         int delta = randomNumber - probability;
+        var battleInformation = fighterInjuryInformation.getBattleInformation();
+        if (delta >= 0) {
+            return InjuryGeneratorFactory.EMPTY;
+        }
+        int currentResistance = battleInformation.getResistance();
+        int resistance = randomNumberGeneratorService.getRandomNumberInts(0, currentResistance);
         if (resistance + delta >= 0) {
+            battleInformation.setResistance(currentResistance - resistance);
             return InjuryGeneratorFactory.EMPTY;
         }
         if (weaponDto.getBlunt() > 0) {

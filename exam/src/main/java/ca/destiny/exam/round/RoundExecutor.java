@@ -4,9 +4,8 @@ import ca.destiny.battle.factory.BattleBuilder;
 import ca.destiny.battle.factory.BattleType;
 import ca.destiny.battle.model.BattleDto;
 import ca.destiny.battle.simulation.SimulationBattleExecutor;
+import ca.destiny.evolution.refresh.BattleFighterRefresher;
 import ca.destiny.fighter.BattleFighterDto;
-import ca.destiny.fighter.BattleInformation;
-import ca.destiny.fighter.CharacteristicsDto;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -15,9 +14,12 @@ import java.util.*;
 public class RoundExecutor {
 
     private final SimulationBattleExecutor simulationBattleExecutor;
+    private final BattleFighterRefresher battleFighterRefresher;
 
-    public RoundExecutor(SimulationBattleExecutor simulationBattleExecutor) {
+    public RoundExecutor(SimulationBattleExecutor simulationBattleExecutor,
+                         BattleFighterRefresher battleFighterRefresher) {
         this.simulationBattleExecutor = simulationBattleExecutor;
+        this.battleFighterRefresher = battleFighterRefresher;
     }
 
     public Map<Long, Integer> execute(List<BattleFighterDto> participants, int nbRounds) {
@@ -56,14 +58,14 @@ public class RoundExecutor {
     }
 
     private BattleFighterDto getWinner(BattleFighterDto battleFighterDto, BattleFighterDto battleFighterDto2) {
-        refresh(battleFighterDto);
-        refresh(battleFighterDto2);
+        battleFighterRefresher.refresh(battleFighterDto, false);
+        battleFighterRefresher.refresh(battleFighterDto2, false);
 
         var battleDto = createBattleDto(battleFighterDto, battleFighterDto2);
         BattleDto res = simulationBattleExecutor.execute(battleDto);
         var winner = res.getSummary().getWinners().get(0);
-        refresh(battleFighterDto);
-        refresh(battleFighterDto2);
+        battleFighterRefresher.refresh(battleFighterDto, false);
+        battleFighterRefresher.refresh(battleFighterDto2, false);
         return winner;
     }
 
@@ -74,20 +76,6 @@ public class RoundExecutor {
             return Optional.of(outsider);
         }
         return Optional.empty();
-    }
-
-    private void refresh(BattleFighterDto battleFighterDto) {
-        CharacteristicsDto characteristics = battleFighterDto.getCharacteristics();
-        int speed = characteristics.getSpeed();
-        int vitality = characteristics.getVitality();
-        int courage = characteristics.getCourage();
-        int resistance = characteristics.getResistance();
-        BattleInformation battleInformation = battleFighterDto.getBattleInformation();
-        battleInformation.setSpeed(speed);
-        battleInformation.setResistance(resistance);
-        battleInformation.setVitality(vitality);
-        battleInformation.setCourage(courage);
-        battleInformation.getFightingStatus().setConscience(true);
     }
 
     private BattleDto createBattleDto(BattleFighterDto battleFighterDto,

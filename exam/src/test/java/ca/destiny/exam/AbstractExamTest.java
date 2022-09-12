@@ -34,10 +34,10 @@ public abstract class AbstractExamTest extends AbstractIntegration {
         }
 
         reassignIds(participants);
-        Map<ExamStatus, List<BattleFighterDto>> results = this.exam.exam(participants, laureate);
-
-        writePromoted(outputFile, results.get(ExamStatus.PROMOTED));
-        writeData(results.get(ExamStatus.REJECTED), loserFile);
+//         this.exam.exam(participants, laureate);
+//
+//        writePromoted(outputFile, results.get(ExamStatus.PROMOTED));
+//        writeData(results.get(ExamStatus.REJECTED), loserFile);
     }
 
     private void writePromoted(String outputFile, List<BattleFighterDto> promoted) throws URISyntaxException, IOException {

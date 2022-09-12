@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public abstract class AbstractIntegration {
+
     public static final String SRC_TEST_RESOURCES = "src/test/resources/";
     private final ObjectMapper objectMapper;
     private final ClassLoader classLoader;
@@ -50,6 +52,25 @@ public abstract class AbstractIntegration {
         String json = objectMapper.writeValueAsString(pojo);
         Path filePath = Path.of(SRC_TEST_RESOURCES + fileName);
         Files.writeString(filePath, json);
+    }
+
+    protected <T> void writeListData(List<T> list, String fileName, boolean override) throws IOException {
+        if (!override) {
+            try {
+                List<T> old = loadListFromFile(fileName, new TypeReference<>() {
+                });
+                list.addAll(old);
+            } catch (NoSuchFileException | URISyntaxException e) {
+            }
+
+        }
+        String json = objectMapper.writeValueAsString(list);
+        Path filePath = Path.of(SRC_TEST_RESOURCES + fileName);
+        Files.writeString(filePath, json);
+    }
+
+    protected <T> void writeListData(List<T> pojo, String fileName) throws IOException {
+        writeListData(pojo, fileName, false);
     }
 
 }

@@ -42,7 +42,7 @@ public class HumanPersonFactory {
         personDto.setLastName(lastName);
         personDto.setGender(gender);
         OriginTown originTown = new OriginTown();
-        originTown.setName("Suspicion dark");
+        originTown.setName("Log town");
         personDto.setOriginTown(originTown);
         personDto.setAvailableBodyParts(bodyPartFactory.create());
         personDto.setDestinyDate(gameInformationService.getCurrentDate(gameId));

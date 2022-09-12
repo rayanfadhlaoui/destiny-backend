@@ -21,4 +21,9 @@ public class SevereBruiseInjury extends Injury {
     public int getPain() {
         return 10;
     }
+
+    @Override
+    public int getPenalty() {
+        return 15;
+    }
 }

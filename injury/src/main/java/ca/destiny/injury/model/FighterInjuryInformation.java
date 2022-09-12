@@ -35,10 +35,6 @@ public class FighterInjuryInformation {
         return isKnockout;
     }
 
-    public int getResistance() {
-        return battleInformation.getResistance();
-    }
-
     public List<BodyPartDto> getAvailableBodyParts() {
         return availableBodyParts;
     }

@@ -1,11 +1,12 @@
 package ca.destiny.weapon.behavior;
 
-import ca.destiny.fighter.CharacteristicsDto;
+import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.equipment.weapon.WeaponDto;
 import ca.destiny.weapon.WeaponDamageService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class OptimalWeaponFinder {
@@ -16,18 +17,19 @@ public class OptimalWeaponFinder {
         this.weaponDamageService = weaponDamageService;
     }
 
-    public WeaponDto findOptimal(List<WeaponDto> weapons, CharacteristicsDto characteristicsDto) {
+    public Optional<WeaponDto> findOptimal(List<WeaponDto> weapons, BattleInformation battleInformation) {
         return weapons.stream()
+                .filter(w -> w.getStaminaNeeded() <= battleInformation.getStamina() / 3)
+                .filter(w -> w.getMinimumDexterity() <= battleInformation.getDexterity())
                 .min((o1, o2) -> {
-                    Integer average1 = getAverageDamage(o1, characteristicsDto);
-                    Integer average2 = getAverageDamage(o2, characteristicsDto);
+                    Integer average1 = getAverageDamage(o1, battleInformation);
+                    Integer average2 = getAverageDamage(o2, battleInformation);
                     return average2.compareTo(average1);
-                })
-                .orElseThrow(IllegalArgumentException::new);
+                });
     }
 
-    private Integer getAverageDamage(WeaponDto weaponDto, CharacteristicsDto characteristicsDto) {
-        var range = weaponDamageService.getRange(weaponDto, characteristicsDto);
+    private Integer getAverageDamage(WeaponDto weaponDto, BattleInformation battleInformation) {
+        var range = weaponDamageService.getRange(weaponDto, battleInformation);
         return (range.getLeft() + range.getRight()) / 2;
     }
 }

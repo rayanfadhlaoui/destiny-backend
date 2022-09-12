@@ -16,4 +16,5 @@ public abstract class BattleBuilder {
     public abstract BattleBuilder addFighters(BattleFighterDto... battleFighterDto);
 
     public abstract BattleDto build();
+
 }

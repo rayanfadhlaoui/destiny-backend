@@ -1,6 +1,7 @@
 package ca.destiny.exam.advance;
 
 import ca.destiny.exam.Exam;
+import ca.destiny.exam.PromotedFilter;
 import ca.destiny.exam.round.RoundExecutor;
 import ca.destiny.fighter.ClassEnum;
 import ca.destiny.weapon.behavior.OptimalWeaponFinder;
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class SergeantMayorExam extends Exam {
 
     public SergeantMayorExam(OptimalWeaponFinder optimalWeaponFinder,
-                             RoundExecutor roundExecutor) {
-        super(optimalWeaponFinder, roundExecutor);
+                             RoundExecutor roundExecutor,
+                             PromotedFilter promotedFilter) {
+        super(optimalWeaponFinder, promotedFilter, roundExecutor);
     }
 
     @Override
@@ -32,6 +34,21 @@ public class SergeantMayorExam extends Exam {
     @Override
     protected String getWeaponName() {
         return "Quality Steel";
+    }
+
+    @Override
+    protected int getStaminaNeeded() {
+        return 15;
+    }
+
+    @Override
+    protected int getMinimalDexterity() {
+        return 30;
+    }
+
+    @Override
+    protected int getOptimalDexterity() {
+        return 55;
     }
 
 }

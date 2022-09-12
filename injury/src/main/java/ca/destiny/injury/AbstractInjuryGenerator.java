@@ -14,19 +14,18 @@ public abstract class AbstractInjuryGenerator implements InjuryGenerator {
     protected final RandomNumberGeneratorService randomNumberGeneratorService;
 
     public AbstractInjuryGenerator(BodyPartDto bodyPart) {
-        this.bodyPart = bodyPart;
+        this.bodyPart = bodyPart == null ? new BodyPartDto() : bodyPart;
         randomNumberGeneratorService = new RandomNumberGeneratorService();
     }
 
     @Override
     public void inflict(boolean knockout, BattleInformation battleInformation, FightStatusUpdater fightStatusUpdater) {
         int penalty = knockout ? getPenalty() : 0;
+        penalty += bodyPart.getPenalty();
         Optional<Injury> optionalInjury = getOptionalInjury(penalty);
         optionalInjury.ifPresent(injury -> {
-            if (bodyPart != null) {
-                bodyPart.addInjury(injury);
-                fightStatusUpdater.update(injury, battleInformation);
-            }
+            bodyPart.addInjury(injury);
+            fightStatusUpdater.update(injury, battleInformation);
         });
     }
 

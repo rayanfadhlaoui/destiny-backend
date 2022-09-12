@@ -1,6 +1,6 @@
 package ca.destiny.evolution.creation;
 
-import ca.destiny.evolution.levelup.LevelUpExecutor;
+import ca.destiny.evolution.refresh.BattleFighterRefresher;
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.CharacteristicsDto;
 import ca.destiny.fighter.ClassEnum;
@@ -24,21 +24,21 @@ public class FighterFactory {
     private final RandomNumberGeneratorService randomNumberGeneratorService;
     private final PersonalImprovementService personalImprovementService;
     private final PersonFactory personFactory;
-    private final LevelUpExecutor levelUpExecutor;
+    private final BattleFighterRefresher battleFighterRefresher;
 
     public FighterFactory(RandomNumberGeneratorService randomNumberGeneratorService,
                           PersonalImprovementService personalImprovementService,
                           PersonFactory personFactory,
-                          LevelUpExecutor levelUpExecutor) {
+                          BattleFighterRefresher battleFighterRefresher) {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
         this.personalImprovementService = personalImprovementService;
         this.personFactory = personFactory;
-        this.levelUpExecutor = levelUpExecutor;
+        this.battleFighterRefresher = battleFighterRefresher;
     }
 
     public BattleFighterDto create(PersonDto personDto, Long userId) {
         BattleFighterDto battleFighter = createFighter(personDto, userId);
-        levelUpExecutor.execute(battleFighter);
+        battleFighterRefresher.refresh(battleFighter);
         return battleFighter;
     }
 
@@ -75,6 +75,9 @@ public class FighterFactory {
         rightWeapon.setMaximumDamage(6);
         rightWeapon.setBlunt(1);
         rightWeapon.setPenetration(0);
+        rightWeapon.setStaminaNeeded(1);
+        rightWeapon.setMinimumDexterity(1);
+        rightWeapon.setOptimalDexterity(1);
         equipmentDto.setRightWeapon(rightWeapon);
         return equipmentDto;
     }

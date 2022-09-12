@@ -1,6 +1,7 @@
 package ca.destiny.exam.admiral;
 
 import ca.destiny.exam.Exam;
+import ca.destiny.exam.PromotedFilter;
 import ca.destiny.exam.round.RoundExecutor;
 import ca.destiny.fighter.ClassEnum;
 import ca.destiny.weapon.behavior.OptimalWeaponFinder;
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class AdmiralExam extends Exam {
 
     public AdmiralExam(OptimalWeaponFinder optimalWeaponFinder,
-                       RoundExecutor roundExecutor) {
-        super(optimalWeaponFinder, roundExecutor);
+                       RoundExecutor roundExecutor,
+                       PromotedFilter promotedFilter) {
+        super(optimalWeaponFinder, promotedFilter, roundExecutor);
     }
 
     @Override
@@ -34,4 +36,18 @@ public class AdmiralExam extends Exam {
         return "Dragon";
     }
 
+    @Override
+    protected int getStaminaNeeded() {
+        return 70;
+    }
+
+    @Override
+    protected int getMinimalDexterity() {
+        return 130;
+    }
+
+    @Override
+    protected int getOptimalDexterity() {
+        return 220;
+    }
 }

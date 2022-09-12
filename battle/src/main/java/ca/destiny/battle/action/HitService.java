@@ -1,29 +1,30 @@
 package ca.destiny.battle.action;
 
+import ca.destiny.fighter.equipment.weapon.WeaponDto;
+import ca.destiny.other.RandomNumberGeneratorService;
+
 public class HitService {
 
-    public int hitPercentage(int dexterity, int dodge) {
-        int diff = dexterity - dodge;
-        int sign = diff < 0 ? -1 : 1;
-        return 500 + computeDelta(diff, sign);
+    private final RandomNumberGeneratorService randomNumberGeneratorService;
+    private final DodgePercentageComputer dodgePercentageComputer;
+
+    public HitService(RandomNumberGeneratorService randomNumberGeneratorService) {
+        this.randomNumberGeneratorService = randomNumberGeneratorService;
+        this.dodgePercentageComputer = new DodgePercentageComputer();
     }
 
-    private int computeDelta(int diff, int sign) {
-        if (diff >= 130 || diff <= -130) {
-            return 400 * sign;
-        }
-        if (diff >= -50 && diff <= 50) {
-            return diff * 5;
-        } else if (diff >= -70 && diff <= 70) {
-            int rest = diff - (50 * sign);
-            return computeDelta(50*sign, sign) + rest * 3;
-        } else if (diff >= -100 && diff <= 100) {
-            int rest = diff - (70 * sign);
-            return computeDelta(70*sign, sign) + rest * 2;
-        } else {
-            int rest = diff - (100 * sign);
-            return computeDelta(100*sign, sign) + rest;
-        }
+
+    public int hitPercentage(int dexterity, int dodge, WeaponDto weaponDto) {
+        int dexterityPercentage = Math.min(600, getDexterityScore(weaponDto, dexterity));
+
+        int dodgePercentage = dodgePercentageComputer.compute(dexterity - dodge);
+        return dexterityPercentage + dodgePercentage;
     }
 
+    private int getDexterityScore(WeaponDto weaponDto, int dexterity) {
+        int dexterityScore = randomNumberGeneratorService.getRandomNumberInts(weaponDto.getMinimumDexterity(), dexterity);
+
+        double percentage = (dexterityScore * 1.00 / weaponDto.getOptimalDexterity());
+        return (int) (percentage * 600);
+    }
 }

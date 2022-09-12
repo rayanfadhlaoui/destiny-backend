@@ -1,6 +1,7 @@
 package ca.destiny.exam.admiral;
 
 import ca.destiny.exam.Exam;
+import ca.destiny.exam.PromotedFilter;
 import ca.destiny.exam.round.RoundExecutor;
 import ca.destiny.fighter.ClassEnum;
 import ca.destiny.weapon.behavior.OptimalWeaponFinder;
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class ViceAdmiralExam extends Exam {
 
     public ViceAdmiralExam(OptimalWeaponFinder optimalWeaponFinder,
-                           RoundExecutor roundExecutor) {
-        super(optimalWeaponFinder, roundExecutor);
+                           RoundExecutor roundExecutor,
+                           PromotedFilter promotedFilter) {
+        super(optimalWeaponFinder, promotedFilter, roundExecutor);
     }
 
     @Override
@@ -34,4 +36,18 @@ public class ViceAdmiralExam extends Exam {
         return "Quality Diamond";
     }
 
+    @Override
+    protected int getStaminaNeeded() {
+        return 65;
+    }
+
+    @Override
+    protected int getMinimalDexterity() {
+        return 110;
+    }
+
+    @Override
+    protected int getOptimalDexterity() {
+        return 203;
+    }
 }

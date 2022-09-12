@@ -9,6 +9,7 @@ public class BodyPartDto {
 
     private BodyPartType type;
     private List<Injury> injuries = new ArrayList<>();
+    private int penalty = 0;
 
     public BodyPartType getType() {
         return type;
@@ -28,5 +29,14 @@ public class BodyPartDto {
 
     public void addInjury(Injury injury) {
         injuries.add(injury);
+        penalty += injury.getPenalty();
+    }
+
+    public int getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(int penalty) {
+        this.penalty = penalty;
     }
 }

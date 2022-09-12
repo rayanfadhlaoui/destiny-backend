@@ -7,7 +7,7 @@ public class CharacteristicsDto {
     private int speed = 1;
     private int dexterity = 1;
     private int defense = 1;
-    private int vitality = 1;
+    private int vitality = 5;
     private int resistance = 1;
     private int courage = 1;
     private int dodge = 1;

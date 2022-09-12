@@ -1,6 +1,7 @@
 package ca.destiny.exam.elite;
 
 import ca.destiny.exam.Exam;
+import ca.destiny.exam.PromotedFilter;
 import ca.destiny.exam.round.RoundExecutor;
 import ca.destiny.fighter.ClassEnum;
 import ca.destiny.weapon.behavior.OptimalWeaponFinder;
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class MayorExam extends Exam {
 
     public MayorExam(OptimalWeaponFinder optimalWeaponFinder,
-                       RoundExecutor roundExecutor) {
-        super(optimalWeaponFinder, roundExecutor);
+                     RoundExecutor roundExecutor,
+                     PromotedFilter promotedFilter) {
+        super(optimalWeaponFinder, promotedFilter, roundExecutor);
     }
 
     @Override
@@ -34,4 +36,18 @@ public class MayorExam extends Exam {
         return "Quality Golden";
     }
 
+    @Override
+    protected int getStaminaNeeded() {
+        return 45;
+    }
+
+    @Override
+    protected int getMinimalDexterity() {
+        return 80;
+    }
+
+    @Override
+    protected int getOptimalDexterity() {
+        return 125;
+    }
 }

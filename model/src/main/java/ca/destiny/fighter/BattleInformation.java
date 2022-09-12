@@ -9,6 +9,7 @@ public class BattleInformation {
     private int defense;
     private int courage;
     private int speed;
+    private int stamina;
     private FightingStatus fightingStatus = new FightingStatus();
     private Penalty penalty;
 
@@ -91,5 +92,13 @@ public class BattleInformation {
 
     public void setPenalty(Penalty penalty) {
         this.penalty = penalty;
+    }
+
+    public int getStamina() {
+        return stamina;
+    }
+
+    public void setStamina(int stamina) {
+        this.stamina = stamina;
     }
 }

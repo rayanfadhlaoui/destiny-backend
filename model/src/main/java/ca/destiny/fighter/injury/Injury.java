@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(BrokenBoneInjury.class),
         @JsonSubTypes.Type(DislocationInjury.class),
-        @JsonSubTypes.Type(SevereBruiseInjury.class),
+        @JsonSubTypes.Type(SevereFractureInjury.class),
         @JsonSubTypes.Type(MinorFractureInjury.class),
+        @JsonSubTypes.Type(SevereBruiseInjury.class),
         @JsonSubTypes.Type(MinorBruiseInjury.class),
         @JsonSubTypes.Type(SuperficialBruiseInjury.class),
-        @JsonSubTypes.Type(SevereFractureInjury.class),
 })
 public abstract class Injury {
 
@@ -47,4 +47,6 @@ public abstract class Injury {
     public void setLastingDays(int lastingDays) {
         this.lastingDays = lastingDays;
     }
+
+    public abstract int getPenalty();
 }

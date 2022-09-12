@@ -44,5 +44,4 @@ public class DuelSingleCellBattleBuilder extends BattleBuilder {
         return duelSingleCellBattleDto;
     }
 
-
 }

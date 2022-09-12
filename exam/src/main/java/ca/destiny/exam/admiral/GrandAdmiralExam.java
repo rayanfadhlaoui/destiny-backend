@@ -1,6 +1,7 @@
 package ca.destiny.exam.admiral;
 
 import ca.destiny.exam.Exam;
+import ca.destiny.exam.PromotedFilter;
 import ca.destiny.exam.round.RoundExecutor;
 import ca.destiny.fighter.ClassEnum;
 import ca.destiny.weapon.behavior.OptimalWeaponFinder;
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 public class GrandAdmiralExam extends Exam {
 
     public GrandAdmiralExam(OptimalWeaponFinder optimalWeaponFinder,
-                       RoundExecutor roundExecutor) {
-        super(optimalWeaponFinder, roundExecutor);
+                            RoundExecutor roundExecutor,
+                            PromotedFilter promotedFilter) {
+        super(optimalWeaponFinder, promotedFilter, roundExecutor);
     }
 
     @Override
@@ -32,5 +34,20 @@ public class GrandAdmiralExam extends Exam {
     @Override
     protected String getWeaponName() {
         return "Celestial dragon";
+    }
+
+    @Override
+    protected int getStaminaNeeded() {
+        return 75;
+    }
+
+    @Override
+    protected int getMinimalDexterity() {
+        return 150;
+    }
+
+    @Override
+    protected int getOptimalDexterity() {
+        return 260;
     }
 }

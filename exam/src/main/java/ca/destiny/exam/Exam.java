@@ -6,74 +6,87 @@ import ca.destiny.fighter.ClassEnum;
 import ca.destiny.fighter.equipment.weapon.*;
 import ca.destiny.weapon.behavior.OptimalWeaponFinder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public abstract class Exam {
 
-    public static final int NB_ROUNDS = 30;
+    public static final int NB_ROUNDS = 5;
 
     private final OptimalWeaponFinder optimalWeaponFinder;
+    private final PromotedFilter promotedFilter;
     private final RoundExecutor roundExecutor;
 
     public Exam(OptimalWeaponFinder optimalWeaponFinder,
+                PromotedFilter promotedFilter,
                 RoundExecutor roundExecutor) {
+        this.promotedFilter = promotedFilter;
         this.roundExecutor = roundExecutor;
         this.optimalWeaponFinder = optimalWeaponFinder;
     }
 
-    public Map<ExamStatus, List<BattleFighterDto>> exam(List<BattleFighterDto> fighters, int laureate) {
-        ClassEnum previous = getPromotion().getPrevious();
-        List<BattleFighterDto> participants = fighters.stream()
-                .filter(f -> f.getClassEnum() == previous)
-                .filter(f -> f.getBattleInformation().getFightingStatus().isAlive())
-                .collect(Collectors.toList());
-
-        List<WeaponDto> weapons = Arrays.asList(createDagger(), createSword(), createAxe(), createFist());
-        participants.forEach(w -> {
-            var all = new ArrayList<>(weapons);
-            WeaponDto rightWeapon = w.getEquipmentDto().getRightWeapon();
-            all.add(rightWeapon);
-            WeaponDto optimal = optimalWeaponFinder.findOptimal(all, w.getCharacteristics());
-            w.getEquipmentDto().setRightWeapon(optimal);
-        });
-
-        Map<Long, Integer> score = roundExecutor.execute(participants, NB_ROUNDS);
-
-        List<BattleFighterDto> sorted = score.entrySet()
-                .stream()
-                .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
-                .map(Map.Entry::getKey)
-                .map(id -> participants.stream().filter(a -> a.getId() == id).findFirst().orElseThrow(() -> new RuntimeException(String.valueOf(id))))
-                .filter(f -> f.getBattleInformation().getFightingStatus().isAlive())
-                .collect(Collectors.toList());
-
+    public void exam(List<BattleFighterDto> fighters, int laureate, List<Supplier<WeaponDto>> weaponSuppliers) {
+        List<BattleFighterDto> participants = getParticipants(fighters);
         List<BattleFighterDto> promoted = new ArrayList<>();
         List<BattleFighterDto> rejected = new ArrayList<>();
         int count = 0;
-        for (BattleFighterDto fighter : sorted) {
-            if (count < laureate) {
-                promoted.add(fighter);
-            } else {
-                rejected.add(fighter);
-            }
-            int age = fighter.getPerson().getAge();
-            fighter.getPerson().setAge(age + 1);
+        while (promoted.size() != laureate) {
+            Map<ExamStatus, List<BattleFighterDto>> examResult = executeExam(laureate - promoted.size(), participants);
+            promoted.addAll(examResult.get(ExamStatus.PROMOTED));
+            participants = examResult.get(ExamStatus.PENDING);
+            rejected.addAll(examResult.get(ExamStatus.REJECTED));
             count++;
         }
+
+        System.out.println("number of execution :" + count);
+
+        applyPromotion(promoted, weaponSuppliers);
+        applyDemotion(rejected);
+    }
+
+    private void applyDemotion(List<BattleFighterDto> rejected) {
+        rejected.forEach(w -> {
+            w.setClassEnum(getPromotion().getPrevious());
+        });
+    }
+
+    private Map<ExamStatus, List<BattleFighterDto>> executeExam(int laureate, List<BattleFighterDto> participants) {
+        Map<Long, Integer> score = roundExecutor.execute(participants, NB_ROUNDS);
+
+        return promotedFilter.sort(participants, score, laureate);
+    }
+
+    private void applyPromotion(List<BattleFighterDto> promoted, List<Supplier<WeaponDto>> weaponSuppliers) {
+        List<Supplier<WeaponDto>> localWeaponSuppliers = Arrays.asList(this::createDagger,
+                this::createSword,
+                this::createAxe,
+                this::createFist);
+
+        weaponSuppliers.addAll(localWeaponSuppliers);
+
+        var weapons = weaponSuppliers.stream()
+                .map(Supplier::get)
+                .collect(Collectors.toList());
 
         promoted.forEach(w -> {
             w.setClassEnum(getPromotion());
             var all = new ArrayList<>(weapons);
             all.add(w.getEquipmentDto().getRightWeapon());
-            WeaponDto optimal = optimalWeaponFinder.findOptimal(all, w.getCharacteristics());
-            w.getEquipmentDto().setRightWeapon(optimal);
+            optimalWeaponFinder.findOptimal(all, w.getBattleInformation())
+                    .ifPresent(optimal -> w.getEquipmentDto().setRightWeapon(optimal));
         });
+    }
 
-        Map<ExamStatus, List<BattleFighterDto>> result = new HashMap<>();
-        result.put(ExamStatus.PROMOTED, promoted);
-        result.put(ExamStatus.REJECTED, rejected);
-        return result;
+    private List<BattleFighterDto> getParticipants(List<BattleFighterDto> fighters) {
+        ClassEnum previous = getPromotion().getPrevious();
+        return fighters.stream()
+                .filter(f -> f.getClassEnum() == previous || f.getClassEnum() == getPromotion())
+                .filter(f -> f.getBattleInformation().getFightingStatus().isAlive())
+                .collect(Collectors.toList());
     }
 
     protected abstract ClassEnum getPromotion();
@@ -84,12 +97,21 @@ public abstract class Exam {
 
     protected abstract String getWeaponName();
 
+    protected abstract int getStaminaNeeded();
+
+    protected abstract int getMinimalDexterity();
+
+    protected abstract int getOptimalDexterity();
+
     private WeaponDto createAxe() {
         WeaponDto weaponDto = new AxeDto();
         weaponDto.setBlunt(1);
         weaponDto.setName(getWeaponName() + " axe");
         weaponDto.setMinimumDamage(getMinimumDamage());
         weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setStaminaNeeded(getStaminaNeeded());
+        weaponDto.setOptimalDexterity(getOptimalDexterity());
+        weaponDto.setMinimumDexterity(getMinimalDexterity());
         weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
         return weaponDto;
     }
@@ -100,6 +122,9 @@ public abstract class Exam {
         weaponDto.setName(getWeaponName() + " sword");
         weaponDto.setMinimumDamage(getMinimumDamage());
         weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setStaminaNeeded(getStaminaNeeded());
+        weaponDto.setOptimalDexterity(getOptimalDexterity());
+        weaponDto.setMinimumDexterity(getMinimalDexterity());
         weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
         return weaponDto;
     }
@@ -110,6 +135,9 @@ public abstract class Exam {
         weaponDto.setName(getWeaponName() + " dagger");
         weaponDto.setMinimumDamage(getMinimumDamage());
         weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setStaminaNeeded(getStaminaNeeded());
+        weaponDto.setOptimalDexterity(getOptimalDexterity());
+        weaponDto.setMinimumDexterity(getMinimalDexterity());
         weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
         return weaponDto;
     }
@@ -120,6 +148,9 @@ public abstract class Exam {
         weaponDto.setName(getWeaponName() + " fist");
         weaponDto.setMinimumDamage(getMinimumDamage());
         weaponDto.setMaximumDamage(getMaximumDamage());
+        weaponDto.setStaminaNeeded(getStaminaNeeded());
+        weaponDto.setOptimalDexterity(getOptimalDexterity());
+        weaponDto.setMinimumDexterity(getMinimalDexterity());
         weaponDto.setAbilityBonus(createAbilityBonus(0, 0, 0));
         return weaponDto;
     }

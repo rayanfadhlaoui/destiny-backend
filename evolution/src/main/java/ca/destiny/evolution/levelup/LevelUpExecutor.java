@@ -24,21 +24,32 @@ public class LevelUpExecutor {
     }
 
     public void execute(BattleFighterDto battleFighterDto) {
+        int previousVitality = battleFighterDto.getCharacteristics().getVitality();
+        int previousStamina = battleFighterDto.getCharacteristics().getStamina();
         specialisationGenerator.improvePersonalEnhancers(battleFighterDto.getExperience());
         getEnhancers(battleFighterDto).forEach(en -> en.improve(battleFighterDto.getCharacteristics()));
-        battleFighterDto.setBattleInformation(getBattleInformation(battleFighterDto.getCharacteristics()));
+
+        int vitality = battleFighterDto.getCharacteristics().getVitality();
+        int stamina = battleFighterDto.getCharacteristics().getStamina();
+        vitality = (vitality - previousVitality) + battleFighterDto.getBattleInformation().getVitality();
+        stamina = (stamina - previousStamina) + battleFighterDto.getBattleInformation().getStamina();
+
+        battleFighterDto.setBattleInformation(getBattleInformation(battleFighterDto.getCharacteristics(),
+                vitality,
+                stamina));
     }
 
-    private BattleInformation getBattleInformation(CharacteristicsDto characteristics) {
+    private BattleInformation getBattleInformation(CharacteristicsDto characteristics, int vitality, int stamina) {
         BattleInformation battleInformation = new BattleInformation();
-        battleInformation.setVitality(characteristics.getVitality());
+        battleInformation.setStrength(characteristics.getStrength());
+        battleInformation.setDefense(characteristics.getDefense());
+        battleInformation.setVitality(vitality);
+        battleInformation.setStamina(stamina);
+        battleInformation.setResistance(characteristics.getResistance());
         battleInformation.setDexterity(characteristics.getDexterity());
         battleInformation.setDodge(characteristics.getDodge());
-        battleInformation.setCourage(characteristics.getCourage());
-        battleInformation.setResistance(characteristics.getResistance());
         battleInformation.setSpeed(characteristics.getSpeed());
-        battleInformation.setDefense(characteristics.getDefense());
-        battleInformation.setStrength(characteristics.getStrength());
+        battleInformation.setCourage(characteristics.getCourage());
         return battleInformation;
     }
 

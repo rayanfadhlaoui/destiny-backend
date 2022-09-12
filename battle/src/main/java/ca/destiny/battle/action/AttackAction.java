@@ -3,6 +3,7 @@ package ca.destiny.battle.action;
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.BattleInformation;
 import ca.destiny.fighter.FightingStatus;
+import ca.destiny.fighter.equipment.EquipmentDto;
 import ca.destiny.fighter.experience.ExperienceDto;
 import ca.destiny.injury.InjuryService;
 import ca.destiny.injury.model.FighterInjuryInformation;
@@ -23,7 +24,7 @@ public abstract class AttackAction implements Action {
                         BattleFighterDto inactiveFighter) {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
         this.injuryService = injuryService;
-        this.hitService = new HitService();
+        this.hitService = new HitService(randomNumberGeneratorService);
         this.damageService = new DamageService();
         defensiveBattleFighter = inactiveFighter;
         activeBattleFighter = activeFighter;
@@ -31,19 +32,27 @@ public abstract class AttackAction implements Action {
 
     @Override
     public boolean execute() {
+        EquipmentDto equipmentDto = activeBattleFighter.getEquipmentDto();
         var activeBattleInformation = activeBattleFighter.getBattleInformation();
         var defensiveBattleInformation = defensiveBattleFighter.getBattleInformation();
+        updateStamina(equipmentDto, activeBattleInformation);
         if (fighterHasHit(activeBattleInformation, defensiveBattleInformation)) {
             int damage = getDamage(defensiveBattleInformation);
             int currentVitality = defensiveBattleInformation.getVitality();
             int vitality = currentVitality - damage;
             defensiveBattleInformation.setVitality(vitality);
             var fighterInjuryInformation = new FighterInjuryInformation(damage, defensiveBattleFighter);
-            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, activeBattleFighter.getEquipmentDto().getRightWeapon());
+            injuryService.inflictInjuryIfNeeded(fighterInjuryInformation, equipmentDto.getRightWeapon());
 
             ifWonAddExperience(vitality, defensiveBattleInformation.getFightingStatus());
         }
         return false;
+    }
+
+    private void updateStamina(EquipmentDto equipmentDto, BattleInformation battleInformation) {
+        int currentStamina = battleInformation.getStamina();
+        int staminaNeeded = equipmentDto.getRightWeapon().getStaminaNeeded();
+        battleInformation.setStamina(currentStamina - staminaNeeded);
     }
 
     private int getDamage(BattleInformation defensiveBattleInformation) {
@@ -57,7 +66,7 @@ public abstract class AttackAction implements Action {
     private boolean fighterHasHit(BattleInformation activeBattleInformation, BattleInformation defensiveBattleInformation) {
         int dexterity = activeBattleInformation.getDexterity();
         int dodge = defensiveBattleInformation.getDodge();
-        int hitPercentage = hitService.hitPercentage(dexterity, dodge);
+        int hitPercentage = hitService.hitPercentage(dexterity, dodge, activeBattleFighter.getEquipmentDto().getRightWeapon());
         hitPercentage = applyAccuracyBonus(hitPercentage);
         return randomNumberGeneratorService.getRandomNumberInts(0, 1000) <= hitPercentage;
     }

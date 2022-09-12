@@ -15,7 +15,7 @@ public class GrandAdmiralExamExecutor extends ExamExecutor {
 
     @Override
     protected int getTargetAmount() {
-        return 3;
+        return 1;
     }
 
     @Override

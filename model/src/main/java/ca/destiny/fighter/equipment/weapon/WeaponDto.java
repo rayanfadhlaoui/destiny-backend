@@ -16,9 +16,12 @@ public abstract class WeaponDto {
     private String name;
     private AbilityBonus abilityBonus;
     private int minimumDamage;
+    private int staminaNeeded;
     private int maximumDamage;
     private int penetration;
     private int blunt;
+    private int minimumDexterity = -1;
+    private int optimalDexterity = -1;
 
     public abstract WeaponType getWeaponType();
 
@@ -70,5 +73,29 @@ public abstract class WeaponDto {
 
     public void setAbilityBonus(AbilityBonus abilityBonus) {
         this.abilityBonus = abilityBonus;
+    }
+
+    public int getStaminaNeeded() {
+        return staminaNeeded;
+    }
+
+    public void setStaminaNeeded(int staminaNeeded) {
+        this.staminaNeeded = staminaNeeded;
+    }
+
+    public int getMinimumDexterity() {
+        return minimumDexterity;
+    }
+
+    public int getOptimalDexterity() {
+        return optimalDexterity;
+    }
+
+    public void setMinimumDexterity(int minimumDexterity) {
+        this.minimumDexterity = minimumDexterity;
+    }
+
+    public void setOptimalDexterity(int optimalDexterity) {
+        this.optimalDexterity = optimalDexterity;
     }
 }

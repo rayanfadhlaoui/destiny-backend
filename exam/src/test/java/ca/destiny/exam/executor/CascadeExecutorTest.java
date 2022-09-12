@@ -40,7 +40,7 @@ public class CascadeExecutorTest extends AbstractIntegration {
     void cascadeExamExecutor() throws IOException {
         long t1 = System.currentTimeMillis();
         List<BattleFighterDto> fighters = new ArrayList<>();
-        grandAdmiralExamExecutor.execute(fighters, 1);
+        grandAdmiralExamExecutor.execute(fighters, 0, new ArrayList<>());
         t1 = System.currentTimeMillis() - t1;
         System.out.println(t1 + " ms for all execution");
 
@@ -48,13 +48,33 @@ public class CascadeExecutorTest extends AbstractIntegration {
                 .filter(p -> p.getBattleInformation().getFightingStatus().isAlive())
                 .collect(Collectors.toList());
 
-        writeData(fighters, "SuspicionDark.json");
+        writeData(fighters, "LogTown.json");
+    }
+
+    @Test
+    void cascadeExamExecutorFromExisting() throws IOException, URISyntaxException {
+        List<BattleFighterDto> fighters = loadListFromFile("LogTown.json", new TypeReference<>() {
+        });
+        long t1 = System.currentTimeMillis();
+        grandAdmiralExamExecutor.execute(fighters, 0, new ArrayList<>());
+        t1 = System.currentTimeMillis() - t1;
+        System.out.println(t1 + " ms for all execution");
+
+        List<BattleFighterDto> alive = fighters.stream()
+                .filter(p -> p.getBattleInformation().getFightingStatus().isAlive())
+                .collect(Collectors.toList());
+        List<BattleFighterDto> dead = fighters.stream()
+                .filter(p -> !p.getBattleInformation().getFightingStatus().isAlive())
+                .collect(Collectors.toList());
+
+        writeListData(alive, "LogTown.json");
+        writeListData(dead, "dead.json", true);
     }
 
 
     @Test
     void tmp() throws IOException, URISyntaxException {
-        List<BattleFighterDto> fighters = loadListFromFile("SuspicionDark.json", new TypeReference<>() {
+        List<BattleFighterDto> fighters = loadListFromFile("LogTown.json", new TypeReference<>() {
         });
         List<BattleFighterDto> collect = fighters.stream()
 //                .filter(p -> p.getPerson().getFirstName().equals("Johnny"))
@@ -87,9 +107,10 @@ public class CascadeExecutorTest extends AbstractIntegration {
         long eliteMalCount = fighters.stream()
                 .filter(p -> p.getPerson().getGender() == GenderEnum.MALE)
                 .map(BattleFighterDto::getClassEnum)
-                .filter(c -> c == ClassEnum.COLONEL || c == ClassEnum.FIRST_LIEUTENANT || c == ClassEnum.JUNIOR_LIEUTENANT || c == ClassEnum.LIEUTENANT|| c == ClassEnum.MAYOR)
+                .filter(c -> c == ClassEnum.COLONEL || c == ClassEnum.FIRST_LIEUTENANT || c == ClassEnum.JUNIOR_LIEUTENANT || c == ClassEnum.LIEUTENANT || c == ClassEnum.MAYOR)
                 .count();
 
+        System.out.println("ef -> " + eliteFemalCount);
         System.out.println("ef -> " + eliteFemalCount);
         System.out.println("em -> " + eliteMalCount);
 
@@ -97,6 +118,7 @@ public class CascadeExecutorTest extends AbstractIntegration {
         System.out.println("getVitality:" + getMaxCourage(fighters, BattleInformation::getVitality));
         System.out.println("getDefense:" + getMaxCourage(fighters, BattleInformation::getDefense));
         System.out.println("getDexterity:" + getMaxCourage(fighters, BattleInformation::getDexterity));
+        System.out.println("getStamina:" + getMaxCourage(fighters, BattleInformation::getStamina));
         System.out.println("getSpeed:" + getMaxCourage(fighters, BattleInformation::getSpeed));
         System.out.println("getStrength:" + getMaxCourage(fighters, BattleInformation::getStrength));
         System.out.println("getDodge:" + getMaxCourage(fighters, BattleInformation::getDodge));

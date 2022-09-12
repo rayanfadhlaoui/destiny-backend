@@ -20,4 +20,9 @@ public class MinorBruiseInjury extends Injury {
     public int getPain() {
         return 5;
     }
+
+    @Override
+    public int getPenalty() {
+        return 10;
+    }
 }

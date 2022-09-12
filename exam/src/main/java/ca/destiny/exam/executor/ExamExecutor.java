@@ -3,8 +3,10 @@ package ca.destiny.exam.executor;
 import ca.destiny.exam.Exam;
 import ca.destiny.fighter.BattleFighterDto;
 import ca.destiny.fighter.ClassEnum;
+import ca.destiny.fighter.equipment.weapon.WeaponDto;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class ExamExecutor {
 
@@ -16,17 +18,17 @@ public abstract class ExamExecutor {
         this.exam = exam;
     }
 
-    public List<BattleFighterDto> execute(List<BattleFighterDto> fighters, int needed) {
+    public List<BattleFighterDto> execute(List<BattleFighterDto> fighters, int missingFighter, List<Supplier<WeaponDto>> weaponSuppliers) {
         long currentAmount = fighters.stream()
                 .map(BattleFighterDto::getClassEnum)
                 .filter(v -> v == getTargetClass())
                 .count();
-        int targetAmount = getTargetAmount() + needed;
-        if (currentAmount < targetAmount) {
-            examExecutor.execute(fighters, (int) (targetAmount - currentAmount));
-            exam.exam(fighters, needed);
+        int targetAmount = (int) (getTargetAmount() - currentAmount);
+        examExecutor.execute(fighters, missingFighter + targetAmount, weaponSuppliers);
+        if (getTargetClass() != ClassEnum.GRAND_ADMIRAL) {
+            exam.exam(fighters, Math.max(missingFighter, getTargetAmount()), weaponSuppliers);
         } else {
-            examExecutor.execute(fighters, 0);
+            exam.exam(fighters, 1, weaponSuppliers);
         }
         return fighters;
     }

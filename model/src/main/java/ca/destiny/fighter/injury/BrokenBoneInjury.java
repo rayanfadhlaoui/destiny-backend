@@ -20,4 +20,9 @@ public class BrokenBoneInjury extends Injury {
     public int getPain() {
         return 100;
     }
+
+    @Override
+    public int getPenalty() {
+        return 60;
+    }
 }
