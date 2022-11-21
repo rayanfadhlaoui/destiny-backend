@@ -21,6 +21,7 @@
         <module>common-services</module>
         <module>evolution</module>
         <module>battle</module>
+        <module>battle2</module>
         <module>application</module>
         <module>destinyTest</module>
         <module>injury</module>

@@ -1,0 +1,29 @@
+package ca.destiny.v2.fighter.injury;
+
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("DislocationInjury")
+public class DislocationInjury extends Injury {
+    public DislocationInjury() {
+
+    }
+
+    public DislocationInjury(int deathProbability, int lastingDays) {
+        super(deathProbability, lastingDays);
+    }
+
+    @Override
+    public String getName() {
+        return "Dislocation";
+    }
+
+    @Override
+    public int getPain() {
+        return 75;
+    }
+
+    @Override
+    public int getPenalty() {
+        return 50;
+    }
+}
