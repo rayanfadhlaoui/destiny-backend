@@ -20,4 +20,9 @@ public class DiceFactory {
         double numberOfDice = Math.ceil(Math.abs(strength - defense) / 2d) + 1;
         return new DamageDices(numberOfDice, strength >= defense, randomNumberGeneratorService);
     }
+
+    public InitiativeDice getInitiativeDice(int initiative, int initiative2) {
+        double numberOfDice = Math.ceil(Math.abs(initiative - initiative2) / 2d) + 1;
+        return new InitiativeDice(numberOfDice, initiative >= initiative2, randomNumberGeneratorService);
+    }
 }

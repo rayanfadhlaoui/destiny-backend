@@ -4,7 +4,7 @@ import ca.destiny.ApplicationTest;
 import ca.destiny.battle2.Duel;
 import ca.destiny.battle2.DuelExecutor;
 import ca.destiny.battle2.Fighter;
-import ca.destiny.battle2.FighterFactory;
+import ca.destiny.battle2.FighterFactoryV2;
 import ca.destiny.destinytest.AbstractIntegration;
 import ca.destiny.v2.person.common.RaceEnum;
 import org.junit.jupiter.api.Disabled;
@@ -26,7 +26,7 @@ public class DuelTest extends AbstractIntegration {
     private DuelExecutor duelExecutor;
 
     @Autowired
-    private FighterFactory fighterFactory;
+    private FighterFactoryV2 fighterFactoryV2;
 
     private final Map<RaceEnum, Integer> score = new HashMap<>();
 
@@ -37,10 +37,10 @@ public class DuelTest extends AbstractIntegration {
     @Test
     @Disabled
     void simulate3000Fight() {
-        Fighter human = fighterFactory.create(RaceEnum.HUMAN);
-        Fighter orc = fighterFactory.create(RaceEnum.ORC);
-        Fighter elf = fighterFactory.create(RaceEnum.ELF);
-        Fighter dwarf = fighterFactory.create(RaceEnum.DWARF);
+        Fighter human = fighterFactoryV2.create(RaceEnum.HUMAN);
+        Fighter orc = fighterFactoryV2.create(RaceEnum.ORC);
+        Fighter elf = fighterFactoryV2.create(RaceEnum.ELF);
+        Fighter dwarf = fighterFactoryV2.create(RaceEnum.DWARF);
 
         long t0 = System.currentTimeMillis();
         simulate(human, orc);

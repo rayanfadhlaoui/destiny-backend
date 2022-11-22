@@ -43,6 +43,7 @@ class DuelExecutorTest {
     }
 
     private static Fighter createFighter() {
-        return new Fighter(new Characteristics(3, 3, 3, 3, 3, 1, 1), new HealthStatus(Status.AWARE), RaceEnum.ELF);
+        return null;
+//        return new Fighter(new Characteristics(3, 3, 3, 3, 3, 1, 1), new HealthStatus(Status.AWARE), RaceEnum.ELF);
     }
 }
