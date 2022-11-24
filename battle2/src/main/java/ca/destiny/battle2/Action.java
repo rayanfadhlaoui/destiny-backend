@@ -1,4 +1,5 @@
 package ca.destiny.battle2;
 
-public class Action {
+public interface Action {
+    void execute();
 }

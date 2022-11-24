@@ -6,24 +6,36 @@ import org.springframework.stereotype.Component;
 @Component
 public class DuelExecutor {
 
+    private final InitiativeService initiativeService;
     private final AccuracyService accuracyService;
     private final DamageService damageService;
     private final InjuryService injuryService;
 
-    public DuelExecutor(AccuracyService accuracyService,
+    public DuelExecutor(InitiativeService initiativeService,
+                        AccuracyService accuracyService,
                         DamageService damageService,
                         InjuryService injuryService) {
+        this.initiativeService = initiativeService;
         this.accuracyService = accuracyService;
         this.damageService = damageService;
         this.injuryService = injuryService;
     }
 
     public void execute(Duel duel) {
+        int initiativeAggressor = duel.getAggressor().getCharacteristics().getInitiative();
+        int initiativeDefender = duel.getDefender().getCharacteristics().getInitiative();
+        if (initiativeService.compare(initiativeAggressor, initiativeDefender) < 0) {
+            duel.flipFighter();
+        }
+        executeLocal(duel);
+    }
+
+    private void executeLocal(Duel duel) {
         var accuracyResult = accuracyService.getAccuracyAction(duel.getAggressor(), duel.getDefender());
         switch (accuracyResult) {
             case COUNTERED:
                 duel.flipFighter();
-                execute(duel);
+                executeLocal(duel);
                 break;
             case MISSED:
             case TOUCHABLE_MISS:
@@ -37,7 +49,6 @@ public class DuelExecutor {
             default:
                 throw new IllegalArgumentException();
         }
-
     }
 
     private void executeDamage(Duel duel) {
@@ -45,7 +56,7 @@ public class DuelExecutor {
         switch (damageAction) {
             case COUNTERED:
                 duel.flipFighter();
-                execute(duel);
+                executeLocal(duel);
                 break;
             case NO_DAMAGE:
             case BARELY_ENDURED:

@@ -16,9 +16,7 @@ public class InitiativeService {
         this.initiativeResultPicker = initiativeResultPicker;
     }
 
-    public int compare(Fighter fighter1, Fighter fighter2) {
-        int initiative = fighter1.getCharacteristics().getInitiative();
-        int initiative2 = fighter2.getCharacteristics().getInitiative();
+    public int compare(int initiative, int initiative2) {
         var initiativeDices1 = diceFactory.getInitiativeDice(initiative, initiative2);
         var initiativeDices2 = diceFactory.getInitiativeDice(initiative2, initiative);
         List<Integer> results = initiativeDices1.getResults();

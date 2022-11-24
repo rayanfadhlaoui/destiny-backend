@@ -1,7 +1,10 @@
 package ca.destiny.battle2;
 
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class SquadBattle {
 
@@ -28,7 +31,7 @@ public class SquadBattle {
     }
 
     private Position moveUp(Position key) {
-        return new Position(key.getX(), key.getY() - 1);
+        return new Position(key.getX(), key.getY() - 2);
     }
 
     public boolean isOver() {
@@ -41,5 +44,14 @@ public class SquadBattle {
 
     public Collection<SquadFighter> getSquadFighters() {
         return squadFighterByPosition.values();
+    }
+
+    public Optional<SquadFighter> getSquadFighterForPosition(Position position) {
+        return Optional.ofNullable(squadFighterByPosition.get(position));
+    }
+
+    public void moveFighter(Position previousPosition, SquadFighter squadFighter) {
+        squadFighterByPosition.remove(previousPosition);
+        squadFighterByPosition.put(squadFighter.getPosition(), squadFighter);
     }
 }

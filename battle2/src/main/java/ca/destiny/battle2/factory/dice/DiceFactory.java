@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class DiceFactory {
 
     private final RandomNumberGeneratorService randomNumberGeneratorService;
+
     public DiceFactory(RandomNumberGeneratorService randomNumberGeneratorService) {
         this.randomNumberGeneratorService = randomNumberGeneratorService;
     }
@@ -23,6 +24,10 @@ public class DiceFactory {
 
     public InitiativeDice getInitiativeDice(int initiative, int initiative2) {
         double numberOfDice = Math.ceil(Math.abs(initiative - initiative2) / 2d) + 1;
-        return new InitiativeDice(numberOfDice, initiative >= initiative2, randomNumberGeneratorService);
+        boolean isPositive = initiative >= initiative2;
+        if (!isPositive) {
+            numberOfDice--;
+        }
+        return new InitiativeDice(numberOfDice, isPositive, randomNumberGeneratorService);
     }
 }

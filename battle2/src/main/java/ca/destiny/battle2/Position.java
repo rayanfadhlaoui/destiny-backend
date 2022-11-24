@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class Position {
 
@@ -41,5 +43,20 @@ public class Position {
     @JsonValue
     public String serialize() {
         return x + "X" + y;
+    }
+
+    public List<Position> getSurrounding() {
+        return List.of(move(1, 0),
+                move(-1, 0),
+                move(0, 1),
+                move(0, -1),
+                move(1, 1),
+                move(-1, 1),
+                move(1, -1),
+                move(-1, -1));
+    }
+
+    private Position move(int x, int y) {
+        return new Position(this.x + x, this.y + y);
     }
 }

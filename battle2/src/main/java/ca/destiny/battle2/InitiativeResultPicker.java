@@ -1,7 +1,10 @@
 package ca.destiny.battle2;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class InitiativeResultPicker {
     public Integer pick(boolean positive, List<Integer> results) {
         return results.stream()

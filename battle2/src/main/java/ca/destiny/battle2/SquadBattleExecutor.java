@@ -9,24 +9,33 @@ import java.util.stream.Collectors;
 public class SquadBattleExecutor {
 
     private final InitiativeService initiativeService;
+    private final SquadFighterActionProvider squadFighterActionProvider;
 
-    public SquadBattleExecutor(InitiativeService initiativeService) {
+    public SquadBattleExecutor(InitiativeService initiativeService, SquadFighterActionProvider squadFighterActionProvider) {
         this.initiativeService = initiativeService;
+        this.squadFighterActionProvider = squadFighterActionProvider;
     }
 
     public void execute(SquadBattle squadBattle) {
         List<SquadFighter> fighters = getSortedFighters(squadBattle);
-        executeLocal(fighters);
+        for (SquadFighter fighter : fighters) {
+            execute(fighter, squadBattle);
+        }
     }
 
     private List<SquadFighter> getSortedFighters(SquadBattle squadBattle) {
         return squadBattle.getSquadFighters()
                 .stream()
-                .sorted((o1, o2) -> initiativeService.compare(o1.getFighter(), o2.getFighter()))
+                .sorted((o1, o2) -> initiativeService.compare(getInitiative(o1), getInitiative(o2)))
                 .collect(Collectors.toList());
     }
 
-    private void executeLocal(List<SquadFighter> fighters) {
+    private static int getInitiative(SquadFighter squadFighter) {
+        return squadFighter.getFighter().getCharacteristics().getInitiative();
+    }
 
+    private void execute(SquadFighter fighter, SquadBattle squadBattle) {
+        Action action = squadFighterActionProvider.getAction(fighter, squadBattle);
+        action.execute();
     }
 }
